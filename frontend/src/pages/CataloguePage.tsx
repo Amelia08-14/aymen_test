@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Document, Page as PdfPage, pdfjs } from "react-pdf";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -50,6 +51,7 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(({ number, children, no
 Page.displayName = "Page";
 
 const CatalogueCard = ({ cat, onClick }: { cat: Catalogue; onClick: () => void }) => {
+  const { t } = useTranslation();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -76,7 +78,7 @@ const CatalogueCard = ({ cat, onClick }: { cat: Catalogue; onClick: () => void }
              <h2 className="text-white text-xl md:text-4xl font-bold uppercase tracking-[0.2em] mb-2 leading-tight">{cat.title}</h2>
              
              <div className="mt-4 md:mt-8 px-4 md:px-6 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white text-[10px] md:text-xs uppercase tracking-widest group-hover:bg-[#F7C66A] group-hover:text-[#031B17] transition-all">
-                Cliquer pour lire
+                {t("catalogue.click_to_read")}
              </div>
           </div>
 
@@ -89,6 +91,7 @@ const CatalogueCard = ({ cat, onClick }: { cat: Catalogue; onClick: () => void }
 };
 
 const ReaderModal = ({ cat, onClose }: { cat: Catalogue; onClose: () => void }) => {
+  const { t } = useTranslation();
   const [numPages, setNumPages] = useState<number>(cat.pages);
   const [isPdfLoaded, setIsPdfLoaded] = useState(false);
 
@@ -137,12 +140,12 @@ const ReaderModal = ({ cat, onClose }: { cat: Catalogue; onClose: () => void }) 
             loading={
               <div className="text-white flex flex-col items-center mt-20">
                 <div className="w-12 h-12 border-4 border-[#F7C66A] border-t-transparent rounded-full animate-spin mb-4" />
-                Chargement du Catalogue...
+                {t("catalogue.loading")}
               </div>
             }
             error={
               <div className="text-white text-center p-8 bg-red-900/20 rounded-lg border border-red-500/30 mt-20">
-                <p className="text-xl font-bold mb-2">Impossible de charger le PDF.</p>
+                <p className="text-xl font-bold mb-2">{t("catalogue.pdf_error")}</p>
               </div>
             }
             className="flex flex-col items-center gap-8 relative z-10"
@@ -166,6 +169,7 @@ const ReaderModal = ({ cat, onClose }: { cat: Catalogue; onClose: () => void }) 
 };
 
 export default function CataloguePage() {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -192,10 +196,10 @@ export default function CataloguePage() {
       <main className="relative z-10 pt-32 pb-20 px-6 min-h-[80vh] flex flex-col justify-center">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
-            <span className="font-['PhotographSignature'] text-6xl text-[#F7C66A] block mb-2">Catalogue Officiel</span>
-            <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-widest">AYMEN PROMOTION</h1>
+            <span className="font-['PhotographSignature'] text-6xl text-[#F7C66A] block mb-2">{t("catalogue.script_title")}</span>
+            <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-widest">{t("catalogue.heading")}</h1>
             <p className="mt-6 max-w-2xl mx-auto text-white/70 leading-relaxed">
-              Découvrez l'ensemble de nos projets et nos offres exclusives à travers notre catalogue interactif.
+              {t("catalogue.description")}
             </p>
           </div>
 

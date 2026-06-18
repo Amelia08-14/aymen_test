@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { API_BASE_URL } from "../config";
@@ -34,6 +35,7 @@ const defaultPapers: Record<TerrainPaperKey, boolean> = {
 };
 
 export default function TerrainPage() {
+  const { t } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error" | null; message: string }>({ type: null, message: "" });
@@ -52,14 +54,14 @@ export default function TerrainPage() {
 
   const paperOptions = useMemo(
     () => [
-      { key: "PERMIS_DE_CONSTRUIRE" as const, label: "Permis de construire" },
-      { key: "ACTE_DE_PROPRIETE" as const, label: "Acte de propriété" },
-      { key: "CERTIFICAT_URBANISME" as const, label: "Certificat urbanisme" },
-      { key: "ACTE_LIVRET_FONCIER" as const, label: "Acte livret foncier" },
-      { key: "PLAN_CADASTRAL" as const, label: "Plan cadastral" },
-      { key: "FERIDA" as const, label: "Ferida" },
+      { key: "PERMIS_DE_CONSTRUIRE" as const, label: t("terrain.paper_permis") },
+      { key: "ACTE_DE_PROPRIETE" as const, label: t("terrain.paper_acte") },
+      { key: "CERTIFICAT_URBANISME" as const, label: t("terrain.paper_cert") },
+      { key: "ACTE_LIVRET_FONCIER" as const, label: t("terrain.paper_livret") },
+      { key: "PLAN_CADASTRAL" as const, label: t("terrain.paper_plan") },
+      { key: "FERIDA" as const, label: t("terrain.paper_ferida") },
     ],
-    []
+    [t]
   );
 
   useEffect(() => {
@@ -90,11 +92,11 @@ export default function TerrainPage() {
     setStatus({ type: null, message: "" });
 
     if (!form.firstName || !form.lastName || !form.email || !form.phone || !form.landAddress) {
-      setStatus({ type: "error", message: "Veuillez remplir les champs obligatoires (Nom, Prénom, Email, Téléphone, Adresse du terrain)." });
+      setStatus({ type: "error", message: t("terrain.error_fields") });
       return;
     }
     if (!form.consent) {
-      setStatus({ type: "error", message: "Veuillez accepter la politique de confidentialité pour envoyer votre demande." });
+      setStatus({ type: "error", message: t("terrain.error_consent") });
       return;
     }
 
@@ -119,11 +121,11 @@ export default function TerrainPage() {
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setStatus({ type: "error", message: data?.message || "Une erreur est survenue. Veuillez réessayer." });
+        setStatus({ type: "error", message: data?.message || t("terrain.error_fields") });
         return;
       }
 
-      setStatus({ type: "success", message: data?.message || "Votre demande a été envoyée avec succès." });
+      setStatus({ type: "success", message: data?.message || t("contact_page.success") });
       setForm({
         firstName: "",
         lastName: "",
@@ -137,7 +139,7 @@ export default function TerrainPage() {
         consent: false,
       });
     } catch (err) {
-      setStatus({ type: "error", message: "Impossible de se connecter au serveur. Veuillez réessayer plus tard." });
+      setStatus({ type: "error", message: t("terrain.error_server") });
     } finally {
       setLoading(false);
     }
@@ -169,19 +171,17 @@ export default function TerrainPage() {
             <div className="mx-auto h-full max-w-7xl px-4 md:px-10 flex items-center">
               <div className="max-w-xl">
                 <h1 className="text-3xl md:text-5xl font-bold uppercase tracking-wide leading-tight text-[#F7C66A]">
-                  Nous achetons
-                  <br />
-                  votre terrain
+                  {t("terrain.hero_title")}
                 </h1>
                 <p className="mt-4 text-sm md:text-base text-white/85 font-light leading-relaxed max-w-md">
-                  Évaluez le prix de votre terrain et profitez au maximum de votre propriété.
+                  {t("terrain.hero_desc")}
                 </p>
                 <button
                   type="button"
                   onClick={() => document.getElementById("terrain-form")?.scrollIntoView({ behavior: "smooth" })}
                   className="mt-8 inline-flex items-center justify-center rounded-full border border-[#F7C66A] px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white hover:bg-[#F7C66A] hover:text-[#031B17] transition-colors"
                 >
-                  En savoir plus
+                  {t("terrain.learn_more")}
                 </button>
               </div>
             </div>
@@ -193,14 +193,10 @@ export default function TerrainPage() {
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
               <div className="pt-2">
                   <h2 className="text-2xl md:text-3xl font-bold uppercase tracking-wide text-[#F7C66A]">
-                    Vous souhaitez vendre
-                    <br />
-                    votre terrain ?
+                    {t("terrain.form_title")}
                   </h2>
                   <p className="mt-5 text-sm text-white/70 leading-relaxed font-light text-justify">
-                    Pionnier de l'immobilier neuf, de la construction et de la promotion immobilière en Algérie, Aymen Promotion immobilière œuvre dans l'amélioration de
-                    l'environnement urbain dans lequel se trouvent ses résidences à Alger. Pour cela, Aymen Promotion choisit les meilleurs terrains pour bâtir ses projets.
-                    Vous souhaitez que votre terrain soit le berceau d'un de nos projets de grande envergure ? Remplissez le formulaire avec les informations nécessaires.
+                    {t("terrain.form_desc")}
                   </p>
 
                   <div className="mt-8 space-y-3 text-sm text-white/80">
@@ -241,14 +237,14 @@ export default function TerrainPage() {
                         name="lastName"
                         value={form.lastName}
                         onChange={onChange}
-                        placeholder="Nom*"
+                        placeholder={t("terrain.label_lastname")}
                         className="w-full bg-transparent border-b border-white/20 focus:border-[#F7C66A] outline-none px-1 py-3 text-sm placeholder:text-white/40"
                       />
                       <input
                         name="firstName"
                         value={form.firstName}
                         onChange={onChange}
-                        placeholder="Prénom*"
+                        placeholder={t("terrain.label_firstname")}
                         className="w-full bg-transparent border-b border-white/20 focus:border-[#F7C66A] outline-none px-1 py-3 text-sm placeholder:text-white/40"
                       />
                     </div>
@@ -258,7 +254,7 @@ export default function TerrainPage() {
                         name="email"
                         value={form.email}
                         onChange={onChange}
-                        placeholder="Adresse email*"
+                        placeholder={t("terrain.label_email")}
                         type="email"
                         className="w-full bg-transparent border-b border-white/20 focus:border-[#F7C66A] outline-none px-1 py-3 text-sm placeholder:text-white/40"
                       />
@@ -266,7 +262,7 @@ export default function TerrainPage() {
                         name="subject"
                         value={form.subject}
                         onChange={onChange}
-                        placeholder="Objet"
+                        placeholder={t("terrain.label_subject")}
                         className="w-full bg-transparent border-b border-white/20 focus:border-[#F7C66A] outline-none px-1 py-3 text-sm placeholder:text-white/40"
                       />
                     </div>
@@ -278,7 +274,7 @@ export default function TerrainPage() {
                           name="phone"
                           value={form.phone}
                           onChange={onChange}
-                          placeholder="Téléphone*"
+                          placeholder={t("terrain.label_phone")}
                           className="w-full bg-transparent outline-none text-sm placeholder:text-white/40"
                           inputMode="tel"
                         />
@@ -287,7 +283,7 @@ export default function TerrainPage() {
                         name="landAddress"
                         value={form.landAddress}
                         onChange={onChange}
-                        placeholder="Adresse du terrain*"
+                        placeholder={t("terrain.label_address")}
                         className="w-full bg-transparent border-b border-white/20 focus:border-[#F7C66A] outline-none px-1 py-3 text-sm placeholder:text-white/40"
                       />
                     </div>
@@ -297,20 +293,20 @@ export default function TerrainPage() {
                         name="facade"
                         value={form.facade}
                         onChange={onChange}
-                        placeholder="Façade"
+                        placeholder={t("terrain.label_facade")}
                         className="w-full bg-transparent border-b border-white/20 focus:border-[#F7C66A] outline-none px-1 py-3 text-sm placeholder:text-white/40"
                       />
                       <input
                         name="area"
                         value={form.area}
                         onChange={onChange}
-                        placeholder="Superficie"
+                        placeholder={t("terrain.label_area")}
                         className="w-full bg-transparent border-b border-white/20 focus:border-[#F7C66A] outline-none px-1 py-3 text-sm placeholder:text-white/40"
                       />
                     </div>
 
                     <div className="pt-2">
-                      <div className="text-xs font-bold uppercase tracking-widest text-[#F7C66A] mb-3">Papier du terrain :</div>
+                      <div className="text-xs font-bold uppercase tracking-widest text-[#F7C66A] mb-3">{t("terrain.label_papers")}</div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {paperOptions.map((p) => (
                           <label key={p.key} className="flex items-center gap-3 text-xs text-white/80 cursor-pointer select-none">
@@ -334,7 +330,7 @@ export default function TerrainPage() {
                         className="mt-0.5 h-4 w-4 accent-[#F7C66A]"
                       />
                       <span>
-                        J'accepte que mes données soient traitées conformément à la politique de confidentialité.
+                        {t("terrain.consent")}
                       </span>
                     </label>
 
@@ -347,7 +343,7 @@ export default function TerrainPage() {
                         loading ? "opacity-60 cursor-not-allowed" : "",
                       ].join(" ")}
                     >
-                      {loading ? "Envoi..." : "Prendre contact"}
+                      {loading ? t("terrain.sending") : t("terrain.submit")}
                     </button>
 
                     {!isMobile && <div className="pt-2" />}

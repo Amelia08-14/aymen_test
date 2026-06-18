@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { API_BASE_URL } from "../config";
@@ -16,6 +17,7 @@ const DEPARTMENTS = [
       </svg>
     ),
     description: "Le département de comptabilité et finance joue un rôle crucial dans la gestion d'une entreprise. Il assure la gestion des ressources financières, le suivi des dépenses et des recettes, et garantit la conformité avec la législation. Cela permet une prise de décision éclairée et soutient la croissance de l'entreprise .",
+    descKey: "careers.dept_finance",
   },
   {
     id: "commercial",
@@ -26,6 +28,7 @@ const DEPARTMENTS = [
       </svg>
     ),
     description: "Le service commercial d'Aymen Promotion transforme votre expérience immobilière avec une approche sur-mesure : Expertise de marché pour des conseils personnalisés, Accompagnement client pour une satisfaction optimale, et Suivi dédié pour concrétiser vos projets immobiliers en toute confiance",
+    descKey: "careers.dept_commercial",
   },
   {
     id: "marketing",
@@ -39,6 +42,7 @@ const DEPARTMENTS = [
       </svg>
     ),
     description: "Le département Marketing d’Aymen Promotion façonne l’immobilier de luxe grâce à ses pôles spécialisés : Art & Cinéma pour le storytelling, Brand pour l’image de marque, Marketing Digital pour la visibilité, Technologie pour l’innovation, Call Center pour l’expérience client et Opérations pour une exécution optimale.",
+    descKey: "careers.dept_marketing",
   },
   {
     id: "technique",
@@ -50,6 +54,7 @@ const DEPARTMENTS = [
       </svg>
     ),
     description: "Le service technique constitue le cœur opérationnel de la promotion immobilière : il assure l’analyse du site, la conception architecturale, la préparation des dossiers techniques et le suivi de chantier jusqu’à la réception du projet, garantissant qualité, conformité et délais.",
+    descKey: "careers.dept_technique",
   },
   {
     id: "rh",
@@ -65,10 +70,12 @@ const DEPARTMENTS = [
       </svg>
     ),
     description: "Notre Direction RH est le Moteur humain de l'entreprise, on gère l'ensemble du cycle de vie des employés, on prend en charge le recrutement, l'intégration, la rémunération du personnel et les avantages sociaux, la formation, la gestion des compétences en passant par le licenciement ou la retraite.",
+    descKey: "careers.dept_rh",
   },
 ];
 
 export default function CareersPage() {
+  const { t } = useTranslation();
   const [activeDept, setActiveDept] = useState(DEPARTMENTS[2]); // Marketing default
   const [fileName, setFileName] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -129,7 +136,7 @@ export default function CareersPage() {
       
       // Limite de taille à 5Mo
       if (selectedFile.size > 5 * 1024 * 1024) {
-        setStatus({ type: 'error', message: "Le fichier est trop volumineux. La taille maximum est de 5 Mo." });
+        setStatus({ type: 'error', message: t("contact_page.file_too_large") });
         e.target.value = '';
         setFile(null);
         setFileName("");
@@ -145,11 +152,11 @@ export default function CareersPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.consent) {
-        setStatus({ type: 'error', message: "Veuillez accepter les conditions de traitement des données." });
+        setStatus({ type: 'error', message: t("careers.error_consent") });
         return;
     }
     if (!file) {
-        setStatus({ type: 'error', message: "Veuillez joindre votre CV." });
+        setStatus({ type: 'error', message: t("careers.error_no_cv") });
         return;
     }
 
@@ -183,7 +190,7 @@ export default function CareersPage() {
       const result = await response.json();
 
       if (response.ok) {
-        setStatus({ type: 'success', message: "Candidature envoyée avec succès !" });
+        setStatus({ type: 'success', message: t("careers.success_title") });
         setFormData({
           firstName: "",
           lastName: "",
@@ -207,10 +214,10 @@ export default function CareersPage() {
         setFileName("");
         setFile(null);
       } else {
-        setStatus({ type: 'error', message: result.message || "Une erreur est survenue." });
+        setStatus({ type: 'error', message: result.message || t("careers.error_server") });
       }
     } catch (error) {
-      setStatus({ type: 'error', message: "Impossible de contacter le serveur." });
+      setStatus({ type: 'error', message: t("careers.error_server") });
     } finally {
       setLoading(false);
     }
@@ -254,15 +261,13 @@ export default function CareersPage() {
             className="max-w-xl ml-auto text-right"
           >
             <h1 className="mb-6 text-3xl font-bold leading-tight text-white md:text-5xl">
-              Boostez votre
-              <br />
-              carrière avec nous!
+              {t("careers.hero_title")}
             </h1>
             <button
               onClick={scrollToForm}
               className="rounded-full border border-[#F7C66A] px-8 py-3 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-[#F7C66A] hover:text-[#031B17]"
             >
-              JE POSTULE
+              {t("careers.apply_btn")}
             </button>
           </motion.div>
         </div>
@@ -279,10 +284,10 @@ export default function CareersPage() {
         >
           <div className="mb-12">
             <span className="font-['PhotographSignature'] text-5xl text-[#F7C66A]">
-              Découvrez
+              {t("careers.discover_script")}
             </span>
             <h2 className="mt-2 text-3xl font-bold uppercase tracking-widest text-white md:text-4xl">
-              NOS DÉPARTEMENTS
+              {t("careers.departments_title")}
             </h2>
           </div>
 
@@ -388,7 +393,7 @@ export default function CareersPage() {
                 {activeDept.label}
               </h3>
               <p className="text-sm leading-relaxed text-white/80 md:text-base">
-                {activeDept.description}
+                {t(activeDept.descKey)}
               </p>
             </motion.div>
           </div>
@@ -410,15 +415,15 @@ export default function CareersPage() {
                 <div className="w-24 h-24 mx-auto mb-8 bg-green-500/30 rounded-full flex items-center justify-center">
                   <i className="fa-solid fa-check text-5xl text-green-300"></i>
                 </div>
-                <h3 className="text-3xl font-medium text-green-300 mb-4">Candidature envoyée !</h3>
+                <h3 className="text-3xl font-medium text-green-300 mb-4">{t("careers.success_title")}</h3>
                 <p className="text-green-200 mb-8 text-lg">
-                  {status.message || "Votre candidature a été envoyée avec succès. Notre équipe RH l'étudiera avec attention et vous recontactera dans les plus brefs délais."}
+                  {status.message || t("careers.success_message")}
                 </p>
-                <button 
+                <button
                   onClick={() => setStatus({ type: null, message: "" })}
                   className="bg-green-600 text-white px-10 py-4 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md text-lg"
                 >
-                  Envoyer une nouvelle candidature
+                  {t("careers.send_another")}
                 </button>
               </div>
             ) : (
@@ -426,68 +431,68 @@ export default function CareersPage() {
                 {/* --- 1. IDENTITÉ --- */}
                 <div className="mb-10">
                     <h3 className="text-lg font-bold uppercase tracking-widest text-[#F7C66A] mb-6 border-b border-[#F7C66A]/20 pb-2">
-                        Identité
+                        {t("careers.form_identity")}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-wider text-white/60">Nom *</label>
-                            <input 
-                              type="text" 
+                            <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_lastname")}</label>
+                            <input
+                              type="text"
                               name="lastName"
                               value={formData.lastName}
                               onChange={handleChange}
-                              placeholder="Votre nom" 
-                              className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10" 
+                              placeholder={t("careers.placeholder_lastname")}
+                              className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10"
                               required
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-wider text-white/60">Prénom *</label>
-                            <input 
-                              type="text" 
+                            <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_firstname")}</label>
+                            <input
+                              type="text"
                               name="firstName"
                               value={formData.firstName}
                               onChange={handleChange}
-                              placeholder="Votre prénom" 
-                              className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10" 
+                              placeholder={t("careers.placeholder_firstname")}
+                              className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10"
                               required
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-wider text-white/60">Email *</label>
-                            <input 
-                              type="email" 
+                            <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_email")}</label>
+                            <input
+                              type="email"
                               name="email"
                               value={formData.email}
                               onChange={handleChange}
-                              placeholder="exemple@email.com" 
-                              className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10" 
+                              placeholder="exemple@email.com"
+                              className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10"
                               required
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-wider text-white/60">Téléphone *</label>
+                            <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_phone")}</label>
                             <div className="flex items-center w-full rounded border border-white/10 bg-white/5 px-4 py-3 transition focus-within:border-[#F7C66A] focus-within:bg-white/10">
                                 <span className="mr-3 text-white/60 text-sm">🇩🇿 +213</span>
-                                <input 
-                                  type="tel" 
+                                <input
+                                  type="tel"
                                   name="phone"
                                   value={formData.phone}
                                   onChange={handleChange}
-                                  className="bg-transparent w-full text-sm text-white placeholder-white/30 focus:outline-none" 
+                                  className="bg-transparent w-full text-sm text-white placeholder-white/30 focus:outline-none"
                                   required
                                 />
                             </div>
                         </div>
                         <div className="space-y-2 md:col-span-2">
-                            <label className="text-xs uppercase tracking-wider text-white/60">Ville *</label>
-                            <input 
-                              type="text" 
+                            <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_city")}</label>
+                            <input
+                              type="text"
                               name="city"
                               value={formData.city}
                               onChange={handleChange}
-                              placeholder="Sélectionnez ou saisissez votre ville" 
-                              className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10" 
+                              placeholder={t("careers.placeholder_city")}
+                              className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10"
                               required
                             />
                         </div>
@@ -501,109 +506,109 @@ export default function CareersPage() {
                         {/* Poste & Outils */}
                         <div>
                             <h3 className="text-lg font-bold uppercase tracking-widest text-[#F7C66A] mb-6 border-b border-[#F7C66A]/20 pb-2">
-                                Poste & Outils
+                                {t("careers.form_position")}
                             </h3>
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase tracking-wider text-white/60">Poste Recherché *</label>
-                                    <input 
-                                      type="text" 
+                                    <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_position")}</label>
+                                    <input
+                                      type="text"
                                       name="position"
                                       value={formData.position}
                                       onChange={handleChange}
-                                      placeholder="Ex: Architecte, Commercial..." 
-                                      className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10" 
+                                      placeholder="Ex: Architecte, Commercial..."
+                                      className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10"
                                       required
                                     />
                                 </div>
-                                
+
                                 {/* Radio Groups */}
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase tracking-wider text-white/60 block mb-2">Maîtrise d'un ERP (Odoo, Sage...) ?</label>
+                                    <label className="text-xs uppercase tracking-wider text-white/60 block mb-2">{t("careers.label_erp")}</label>
                                     <div className="flex gap-6 mb-3">
                                         <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input 
-                                              type="radio" 
-                                              name="erp" 
+                                            <input
+                                              type="radio"
+                                              name="erp"
                                               value="Oui"
                                               checked={formData.erp === "Oui"}
                                               onChange={handleChange}
-                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                             />
-                                            <span className="text-sm text-white/80 group-hover:text-white">Oui</span>
+                                            <span className="text-sm text-white/80 group-hover:text-white">{t("careers.opt_yes")}</span>
                                         </label>
                                         <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input 
-                                              type="radio" 
-                                              name="erp" 
+                                            <input
+                                              type="radio"
+                                              name="erp"
                                               value="Non"
                                               checked={formData.erp === "Non"}
                                               onChange={handleChange}
-                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                             />
-                                            <span className="text-sm text-white/80 group-hover:text-white">Non</span>
+                                            <span className="text-sm text-white/80 group-hover:text-white">{t("careers.opt_no")}</span>
                                         </label>
                                     </div>
                                     {formData.erp === "Oui" && (
-                                      <input 
-                                        type="text" 
+                                      <input
+                                        type="text"
                                         name="erpDetails"
                                         value={formData.erpDetails}
                                         onChange={handleChange}
-                                        placeholder="Précisez lequel..." 
-                                        className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10" 
+                                        placeholder="Précisez lequel..."
+                                        className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10"
                                       />
                                     )}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase tracking-wider text-white/60 block mb-2">Connaissance BIM (Architectes) ?</label>
+                                    <label className="text-xs uppercase tracking-wider text-white/60 block mb-2">{t("careers.label_bim")}</label>
                                     <div className="flex gap-6">
                                         <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input 
-                                              type="radio" 
-                                              name="bim" 
+                                            <input
+                                              type="radio"
+                                              name="bim"
                                               value="Oui"
                                               checked={formData.bim === "Oui"}
                                               onChange={handleChange}
-                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                             />
-                                            <span className="text-sm text-white/80 group-hover:text-white">Oui</span>
+                                            <span className="text-sm text-white/80 group-hover:text-white">{t("careers.opt_yes")}</span>
                                         </label>
                                         <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input 
-                                              type="radio" 
-                                              name="bim" 
+                                            <input
+                                              type="radio"
+                                              name="bim"
                                               value="Non"
                                               checked={formData.bim === "Non"}
                                               onChange={handleChange}
-                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                             />
-                                            <span className="text-sm text-white/80 group-hover:text-white">Non</span>
+                                            <span className="text-sm text-white/80 group-hover:text-white">{t("careers.opt_no")}</span>
                                         </label>
                                         <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input 
-                                              type="radio" 
-                                              name="bim" 
+                                            <input
+                                              type="radio"
+                                              name="bim"
                                               value="Pas concerné"
                                               checked={formData.bim === "Pas concerné"}
                                               onChange={handleChange}
-                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                             />
-                                            <span className="text-sm text-white/80 group-hover:text-white">Pas concerné</span>
+                                            <span className="text-sm text-white/80 group-hover:text-white">{t("careers.opt_na")}</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase tracking-wider text-white/60">Autres Logiciels</label>
-                                    <input 
-                                      type="text" 
+                                    <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_software")}</label>
+                                    <input
+                                      type="text"
                                       name="software"
                                       value={formData.software}
                                       onChange={handleChange}
-                                      placeholder="AutoCAD, Revit, Excel..." 
-                                      className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10" 
+                                      placeholder="AutoCAD, Revit, Excel..."
+                                      className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10"
                                     />
                                 </div>
                             </div>
@@ -615,16 +620,16 @@ export default function CareersPage() {
                         {/* Parcours */}
                         <div>
                             <h3 className="text-lg font-bold uppercase tracking-widest text-[#F7C66A] mb-6 border-b border-[#F7C66A]/20 pb-2">
-                                Parcours
+                                {t("careers.form_career")}
                             </h3>
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase tracking-wider text-white/60 block mb-2">Niveau d'expérience</label>
+                                    <label className="text-xs uppercase tracking-wider text-white/60 block mb-2">{t("careers.label_experience")}</label>
                                     <div className="grid grid-cols-4 gap-2">
                                         {['Débutant(e)', '0-1 an', '1-3 ans', '+3 ans'].map((exp) => (
-                                            <button 
-                                              key={exp} 
-                                              type="button" 
+                                            <button
+                                              key={exp}
+                                              type="button"
                                               onClick={() => handleExperienceSelect(exp)}
                                               className={`rounded border ${formData.experience === exp ? 'bg-[#F7C66A] text-[#031B17] border-[#F7C66A]' : 'border-white/10 bg-white/5 text-white hover:bg-white/10'} px-2 py-2 text-xs transition`}
                                             >
@@ -634,14 +639,14 @@ export default function CareersPage() {
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs uppercase tracking-wider text-white/60">Dernier Diplôme *</label>
-                                    <input 
-                                      type="text" 
+                                    <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_diploma")}</label>
+                                    <input
+                                      type="text"
                                       name="diploma"
                                       value={formData.diploma}
                                       onChange={handleChange}
-                                      placeholder="Master, Ingénieur, Licence..." 
-                                      className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10" 
+                                      placeholder={t("careers.placeholder_diploma")}
+                                      className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10"
                                       required
                                     />
                                 </div>
@@ -651,66 +656,66 @@ export default function CareersPage() {
                         {/* Disponibilité */}
                         <div>
                             <h3 className="text-lg font-bold uppercase tracking-widest text-[#F7C66A] mb-6 border-b border-[#F7C66A]/20 pb-2">
-                                Disponibilité
+                                {t("careers.form_availability")}
                             </h3>
                             <div className="space-y-4">
-                                <label className="text-xs uppercase tracking-wider text-white/60 block">Démarrage</label>
+                                <label className="text-xs uppercase tracking-wider text-white/60 block">{t("careers.label_start")}</label>
                                 <label className="flex items-center gap-2 cursor-pointer group">
-                                    <input 
-                                      type="radio" 
-                                      name="startMode" 
+                                    <input
+                                      type="radio"
+                                      name="startMode"
                                       value="immediate"
                                       checked={formData.startMode === "immediate"}
                                       onChange={handleChange}
-                                      className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                      className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                     />
-                                    <span className="text-sm text-white/80 group-hover:text-white">Immédiatement</span>
+                                    <span className="text-sm text-white/80 group-hover:text-white">{t("careers.opt_immediate")}</span>
                                 </label>
                                 <div className="flex items-center gap-2">
-                                    <input 
-                                      type="radio" 
-                                      name="startMode" 
+                                    <input
+                                      type="radio"
+                                      name="startMode"
                                       value="notice"
                                       checked={formData.startMode === "notice"}
                                       onChange={handleChange}
-                                      className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                      className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                     />
-                                    <span className="text-sm text-white/80 mr-2">Préavis de</span>
-                                    <input 
-                                      type="number" 
+                                    <span className="text-sm text-white/80 mr-2">{t("careers.opt_notice")}</span>
+                                    <input
+                                      type="number"
                                       name="noticeWeeks"
                                       value={formData.noticeWeeks}
                                       onChange={handleChange}
                                       disabled={formData.startMode !== "notice"}
-                                      className="w-16 rounded border border-white/10 bg-white/5 px-2 py-1 text-sm text-center text-white focus:border-[#F7C66A] focus:outline-none disabled:opacity-50" 
+                                      className="w-16 rounded border border-white/10 bg-white/5 px-2 py-1 text-sm text-center text-white focus:border-[#F7C66A] focus:outline-none disabled:opacity-50"
                                     />
-                                    <span className="text-sm text-white/80">semaines</span>
+                                    <span className="text-sm text-white/80">{t("careers.opt_weeks")}</span>
                                 </div>
-                                
+
                                 <div className="pt-2">
-                                    <label className="text-xs uppercase tracking-wider text-white/60 block mb-2">Mobilité Géographique ?</label>
+                                    <label className="text-xs uppercase tracking-wider text-white/60 block mb-2">{t("careers.label_mobility")}</label>
                                     <div className="flex gap-6">
                                         <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input 
-                                              type="radio" 
-                                              name="mobility" 
+                                            <input
+                                              type="radio"
+                                              name="mobility"
                                               value="Oui"
                                               checked={formData.mobility === "Oui"}
                                               onChange={handleChange}
-                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                             />
-                                            <span className="text-sm text-white/80 group-hover:text-white">Oui</span>
+                                            <span className="text-sm text-white/80 group-hover:text-white">{t("careers.opt_yes")}</span>
                                         </label>
                                         <label className="flex items-center gap-2 cursor-pointer group">
-                                            <input 
-                                              type="radio" 
-                                              name="mobility" 
+                                            <input
+                                              type="radio"
+                                              name="mobility"
                                               value="Non"
                                               checked={formData.mobility === "Non"}
                                               onChange={handleChange}
-                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                              className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                             />
-                                            <span className="text-sm text-white/80 group-hover:text-white">Non</span>
+                                            <span className="text-sm text-white/80 group-hover:text-white">{t("careers.opt_no")}</span>
                                         </label>
                                     </div>
                                 </div>
@@ -722,33 +727,33 @@ export default function CareersPage() {
                 {/* --- 3. DERNIERS DÉTAILS --- */}
                 <div className="mb-10">
                     <h3 className="text-lg font-bold uppercase tracking-widest text-[#F7C66A] mb-6 border-b border-[#F7C66A]/20 pb-2">
-                        Derniers Détails
+                        {t("careers.form_details")}
                     </h3>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                         <div className="space-y-2">
-                            <label className="text-xs uppercase tracking-wider text-white/60">Motivation (en une phrase)</label>
-                            <textarea 
+                            <label className="text-xs uppercase tracking-wider text-white/60">{t("careers.label_motivation")}</label>
+                            <textarea
                               name="motivation"
                               value={formData.motivation}
                               onChange={handleChange}
-                              placeholder="Pourquoi vous ?" 
-                              rows={4} 
+                              placeholder={t("careers.placeholder_motivation")}
+                              rows={4}
                               className="w-full rounded border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 transition focus:border-[#F7C66A] focus:outline-none focus:bg-white/10 resize-none"
                             ></textarea>
                         </div>
-                        
+
                         <div className="space-y-4">
-                            <label className="text-xs uppercase tracking-wider text-white/60 block">Comment nous avez-vous connus ?</label>
+                            <label className="text-xs uppercase tracking-wider text-white/60 block">{t("careers.label_source")}</label>
                             <div className="grid grid-cols-2 gap-y-3 gap-x-6">
                                 {['Foire de l\'emploi', 'Réseaux sociaux', 'Recommandation', 'Autre'].map((source) => (
                                     <label key={source} className="flex items-center gap-2 cursor-pointer group">
-                                        <input 
-                                          type="radio" 
-                                          name="source" 
+                                        <input
+                                          type="radio"
+                                          name="source"
                                           value={source}
                                           checked={formData.source === source}
                                           onChange={handleChange}
-                                          className="w-4 h-4 accent-[#F7C66A] cursor-pointer" 
+                                          className="w-4 h-4 accent-[#F7C66A] cursor-pointer"
                                         />
                                         <span className="text-sm text-white/80 group-hover:text-white">{source}</span>
                                     </label>
@@ -761,11 +766,11 @@ export default function CareersPage() {
                 {/* --- 4. CV & SUBMIT --- */}
                 <div className="pt-6 border-t border-white/10">
                     <div className="mb-6">
-                        <label className="text-xs uppercase tracking-wider text-white/60 block mb-3">Votre CV (PDF UNIQUEMENT) *</label>
+                        <label className="text-xs uppercase tracking-wider text-white/60 block mb-3">{t("careers.label_cv")}</label>
                         <label className="inline-flex items-center gap-3 px-6 py-3 rounded border border-white/20 bg-white/5 cursor-pointer hover:bg-white/10 hover:border-[#F7C66A] transition group">
                             <svg className="w-5 h-5 text-[#F7C66A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                             <span className={`text-sm font-medium transition ${fileName ? "text-[#F7C66A]" : "text-white group-hover:text-[#F7C66A]"}`}>
-                              {fileName || "Choisir un fichier"}
+                              {fileName || t("careers.choose_file")}
                             </span>
                             <input type="file" className="hidden" accept=".pdf" onChange={handleFileChange} required={!file} />
                         </label>
@@ -781,7 +786,7 @@ export default function CareersPage() {
                           required
                         />
                         <p className="text-[10px] md:text-xs text-white/50 leading-relaxed">
-                            CONSENTEMENT : J'accepte que mes données soient utilisées pour le recrutement en conformité avec la loi 18-07 révisée et compléter par la loi 11-25.
+                            {t("careers.consent")}
                         </p>
                     </div>
 
@@ -802,11 +807,11 @@ export default function CareersPage() {
                       {loading ? (
                         <>
                           <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-                          ENVOI EN COURS...
+                          {t("careers.sending")}
                         </>
                       ) : (
                         <>
-                          ENVOYER MA CANDIDATURE
+                          {t("careers.submit")}
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </>
                       )}

@@ -1,8 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function MenuOverlay({ open, onClose }) {
+  const { t } = useTranslation();
   const [mounted, setMounted] = useState(open);
 
   // garde monté le temps de l'animation de sortie
@@ -24,16 +27,15 @@ export default function MenuOverlay({ open, onClose }) {
 
   const links = useMemo(
     () => [
-      { label: "PROJETS", href: "/projets" },
-      { label: "LOCALITÉS", href: "/projets", state: { tab: "LOCALITÉS" } },
-      { label: "TERRAIN", href: "/terrain" },
-      { label: "À PROPOS", href: "/a-propos" },
-
-      { label: "AYMAG", href: "/aymag" },
-      { label: "CATALOGUE", href: "/catalogue" },
-      { label: "BLOG", href: "/blog" },
-      { label: "CARRIÈRE", href: "/carriere" },
-      { label: "CONTACT", href: "/contact" },
+      { labelKey: "nav.projects", href: "/projets" },
+      { labelKey: "nav.localities", href: "/projets", state: { tab: "LOCALITÉS" } },
+      { labelKey: "nav.terrain", href: "/terrain" },
+      { labelKey: "nav.about", href: "/a-propos" },
+      { labelKey: "nav.aymag", href: "/aymag" },
+      { labelKey: "nav.catalogue", href: "/catalogue" },
+      { labelKey: "nav.blog", href: "/blog" },
+      { labelKey: "nav.careers", href: "/carriere" },
+      { labelKey: "nav.contact", href: "/contact" },
     ],
     []
   );
@@ -64,7 +66,7 @@ export default function MenuOverlay({ open, onClose }) {
       {/* Backdrop : sombre + très léger blur */}
       <button
         type="button"
-        aria-label="Fermer le menu"
+        aria-label={t("nav.close_menu")}
         onClick={onClose}
         className={[
           "absolute inset-0 h-full w-full",
@@ -110,7 +112,7 @@ export default function MenuOverlay({ open, onClose }) {
             type="button"
             onClick={onClose}
             className="grid h-14 w-14 place-items-center text-white/90 hover:text-white transition"
-            aria-label="Fermer"
+            aria-label={t("nav.close")}
           >
             <XCloseIcon />
           </button>
@@ -133,7 +135,7 @@ export default function MenuOverlay({ open, onClose }) {
             <nav className="mt-9 flex flex-col gap-4">
               {links.map((l, idx) => (
                 <Link
-                  key={l.label}
+                  key={l.labelKey}
                   to={l.href}
                   state={l.state}
                   onClick={onClose}
@@ -146,7 +148,7 @@ export default function MenuOverlay({ open, onClose }) {
                   style={{ transitionDelay: open ? `${80 + idx * 60}ms` : "0ms" }}
                 >
                   <span className="relative transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#F7C66A]">
-                    {l.label}
+                    {t(l.labelKey)}
                   </span>
                   <span
                     className="pointer-events-none absolute left-0 bottom-[-6px] h-[1px] w-0 origin-left bg-[#F7C66A] transition-all duration-200 group-hover:w-full"
@@ -156,8 +158,13 @@ export default function MenuOverlay({ open, onClose }) {
               ))}
             </nav>
 
+            {/* Sélecteur de langue */}
+            <div className="mt-10">
+              <LanguageSwitcher variant="full" />
+            </div>
+
             {/* Réseaux */}
-            <div className="mt-12 flex items-center justify-end gap-3">
+            <div className="mt-6 flex items-center justify-end gap-3">
               {socials.map((s) => (
                 <a
                   key={s.label}

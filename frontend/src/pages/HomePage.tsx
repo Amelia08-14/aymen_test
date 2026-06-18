@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useEffect, useMemo, useRef, useState, Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Hero from "../components/Hero";
 import WipeStack, { Slide } from "../components/WipeStack";
 import Header from "../components/Header";
@@ -59,8 +60,8 @@ function WipeImageSection({
       <div className="absolute inset-0 bg-black/40" />
 
       {/* Contenu Texte */}
-      <div className="absolute inset-0 flex items-center pl-6 pr-24 md:px-20">
-        <div className="max-w-xl pt-32 md:pt-0">
+      <div className="absolute inset-0 flex items-center px-6 md:px-20 rtl:justify-end ltr:justify-start">
+        <div className="max-w-xl pt-32 md:pt-0 rtl:text-right ltr:text-left">
           {title && (
             <h2 className="mb-6 text-4xl font-bold text-gold-500 md:text-5xl uppercase tracking-wide leading-tight">
               {title}
@@ -158,6 +159,7 @@ function FadeOnScroll({
 }
 
 export default function HomePage() {
+  const { t, i18n } = useTranslation();
   const [showHeader, setShowHeader] = useState(true);
   const wipeRef = useRef<HTMLDivElement | null>(null);
   const topSentinelRef = useRef<HTMLDivElement | null>(null);
@@ -216,9 +218,9 @@ export default function HomePage() {
         element: (
           <WipeImageSection
             src={isMobile ? "/1-mobile.png" : "/sections/1.png"}
-            title="PROJETS EN COURS"
-            description="Découvrez nos résidences de haut standing en cours de réalisation. Entre architecture moderne et matériaux nobles, chaque projet offre des appartements d'exception conçus pour votre confort."
-            buttonText="DECOUVRIR"
+            title={t("home.slide_ongoing_title")}
+            description={t("home.slide_ongoing_desc")}
+            buttonText={t("home.discover")}
             targetTab="EN COURS"
           />
         ),
@@ -228,9 +230,9 @@ export default function HomePage() {
         element: (
           <WipeImageSection
             src={isMobile ? "/2-mobile.png" : "/sections/2.png"}
-            title="PROJETS FINIS"
-            description="Parcourez notre galerie de résidences déjà livrées. Ces résidences de luxe allient esthétique intemporelle et fonctionnalité, confirmant notre maîtrise de l'immobilier haut de gamme à travers chaque détail."
-            buttonText="DECOUVRIR"
+            title={t("home.slide_finished_title")}
+            description={t("home.slide_finished_desc")}
+            buttonText={t("home.discover")}
             targetTab="FINIS"
           />
         ),
@@ -240,15 +242,15 @@ export default function HomePage() {
         element: (
           <WipeImageSection
             src={isMobile ? "/3-mobile.png" : "/sections/3.png"}
-            title="NOS INTÉRIEURS"
-            description="Plongez dans l'élégance de nos intérieurs de luxe. Chaque espace est sublimé par des matériaux nobles et des finitions méticuleuses, créant une atmosphère raffinée."
-            buttonText="DECOUVRIR"
+            title={t("home.slide_interiors_title")}
+            description={t("home.slide_interiors_desc")}
+            buttonText={t("home.discover")}
             isInterior={true}
           />
         ),
       },
     ],
-    [isMobile]
+    [isMobile, i18n.language]
   );
 
   return (

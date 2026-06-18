@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { LOCALITIES } from "../data/mockData";
 
 // Split localities into two columns
@@ -8,6 +9,7 @@ const localitiesCol1 = LOCALITIES.slice(0, midPoint);
 const localitiesCol2 = LOCALITIES.slice(midPoint);
 
 export default function Footer() {
+  const { t } = useTranslation();
   const year = new Date().getFullYear();
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -35,12 +37,12 @@ export default function Footer() {
         <div className={`flex-1 space-y-8 transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
           <img src="/logo_original.svg" alt="Logo Aymen Promotion, promoteur immobilier Alger depuis 2006" className="h-14 w-auto" />
           <h3 className="text-3xl font-semibold leading-tight md:text-4xl">
-            Restez au coeur de l'actualité du haut standing
+            {t("footer.tagline")}
           </h3>
           <div className="flex items-center gap-3 rounded-lg border border-white/15 bg-white/[0.04] px-4 py-3 text-sm text-white/70 shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
             <input
               type="email"
-              placeholder="E-mail"
+              placeholder={t("footer.email_placeholder")}
               className="w-full bg-transparent text-white placeholder:text-white/55 outline-none"
             />
             <span className="text-white/70">→</span>
@@ -70,7 +72,7 @@ export default function Footer() {
         <div className={`flex-1 space-y-12 text-sm transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
           <div className="grid grid-cols-2 gap-x-12 gap-y-6">
             <div className="space-y-4">
-              <p className="text-[12px] uppercase tracking-[0.2em] text-[#F7C66A]">Localités</p>
+              <p className="text-[12px] uppercase tracking-[0.2em] text-[#F7C66A]">{t("footer.localities")}</p>
               <div className="space-y-3 text-white/85">
                 {localitiesCol1.map((loc) => (
                   <Link 
@@ -84,7 +86,7 @@ export default function Footer() {
               </div>
             </div>
             <div className="space-y-4">
-              <p className="text-[12px] uppercase tracking-[0.2em] text-[#F7C66A] invisible">Localités</p>
+              <p className="text-[12px] uppercase tracking-[0.2em] text-[#F7C66A] invisible">{t("footer.localities")}</p>
               <div className="space-y-3 text-white/85">
                 {localitiesCol2.map((loc) => (
                   <Link 
@@ -100,18 +102,18 @@ export default function Footer() {
           </div>
 
           <div className="space-y-4">
-            <p className="text-[12px] uppercase tracking-[0.2em] text-[#F7C66A]">Nos coordonnées</p>
+            <p className="text-[12px] uppercase tracking-[0.2em] text-[#F7C66A]">{t("footer.coordinates")}</p>
             <div className="space-y-3 text-white/85">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                 <div>
-                  <span className="block font-semibold text-[#F7C66A] mb-1">Siège Commercial</span>
+                  <span className="block font-semibold text-[#F7C66A] mb-1">{t("footer.headquarters")}</span>
                   <a href="https://maps.app.goo.gl/maEexPKHdoVp5GMM9" target="_blank" rel="noopener noreferrer" className="block underline-offset-2 hover:underline">
                     Said Hamdine ilot N 52 section 05,<br /> Bir Mourad Rais - Alger 16000
                   </a>
                 </div>
 
                 <div>
-                  <span className="block font-semibold text-[#F7C66A] mb-1">Direction Générale</span>
+                  <span className="block font-semibold text-[#F7C66A] mb-1">{t("footer.direction")}</span>
                   <a href="https://maps.app.goo.gl/YvrothxkmnrYBNHZ9" target="_blank" rel="noopener noreferrer" className="block underline-offset-2 hover:underline">
                     64 Route Nationale N°1, lot N31,<br /> Bir Mourad Raïs
                   </a>
@@ -128,10 +130,10 @@ export default function Footer() {
       </div>
 
       <div className="relative mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 pb-12 text-[12px] text-white/60 md:flex-row md:items-center md:justify-between md:px-10">
-        <div>© Aymen Promotion {year} | Tous droits réservés.</div>
+        <div>© Aymen Promotion {year} | {t("footer.rights")}</div>
         <div className="flex items-center gap-6">
-          <Link to="/cgu" className="hover:text-white">Conditions Générales</Link>
-          <Link to="/confidentialite" className="hover:text-white">Politique de Confidentialité</Link>
+          <Link to="/cgu" className="hover:text-white">{t("footer.terms")}</Link>
+          <Link to="/confidentialite" className="hover:text-white">{t("footer.privacy")}</Link>
         </div>
       </div>
     </footer>

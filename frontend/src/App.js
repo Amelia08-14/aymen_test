@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./index.css";
 import HomePage from "./pages/HomePage";
 import IntroHero from "./components/IntroHero";
@@ -66,6 +67,15 @@ function HomeRoute() {
 }
 
 function App() {
+  const { i18n } = useTranslation();
+
+  // Sync dir/lang attributes on language change
+  useEffect(() => {
+    const dir = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.setAttribute("dir", dir);
+    document.documentElement.setAttribute("lang", i18n.language || "fr");
+  }, [i18n.language]);
+
   // Ajuste la variable --vh pour les vues mobiles
   useEffect(() => {
     const set = () => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Document, Page as PdfPage, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
@@ -142,6 +143,7 @@ const MagazineCard = ({ mag, onClick }: { mag: Magazine; onClick: () => void }) 
 };
 
 const ReaderModal = ({ mag, onClose }: { mag: Magazine; onClose: () => void }) => {
+  const { t } = useTranslation();
   const bookRef = useRef<any>(null);
   const [numPages, setNumPages] = useState<number>(mag.pages);
   const [isPdfLoaded, setIsPdfLoaded] = useState(false);
@@ -242,13 +244,13 @@ const ReaderModal = ({ mag, onClose }: { mag: Magazine; onClose: () => void }) =
             loading={
               <div className="text-white flex flex-col items-center">
                 <div className="w-8 h-8 border-4 border-[#F7C66A] border-t-transparent rounded-full animate-spin mb-4" />
-                Chargement du PDF...
+                {t("aymag.loading_pdf")}
               </div>
             }
             error={
               <div className="text-white text-center">
-                <p>Impossible de charger le PDF.</p>
-                <p className="text-sm opacity-70">Vérifiez que le fichier existe bien.</p>
+                <p>{t("aymag.pdf_error")}</p>
+                <p className="text-sm opacity-70">{t("aymag.pdf_error_check")}</p>
               </div>
             }
             className="flex justify-center"
@@ -338,7 +340,7 @@ const ReaderModal = ({ mag, onClose }: { mag: Magazine; onClose: () => void }) =
         ) : null}
 
         <p className="mt-6 text-white/50 text-sm hidden md:block">
-          Utilisez les flèches du clavier ou cliquez sur les coins pour tourner les pages
+          {t("aymag.keyboard_hint")}
         </p>
       </div>
     </motion.div>
@@ -346,6 +348,7 @@ const ReaderModal = ({ mag, onClose }: { mag: Magazine; onClose: () => void }) =
 };
 
 export default function AymagPage() {
+  const { t } = useTranslation();
   const [selectedMag, setSelectedMag] = useState<Magazine | null>(null);
 
   useEffect(() => {
@@ -372,10 +375,10 @@ export default function AymagPage() {
       <main className="relative z-10 pt-32 pb-20 px-6">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-20">
-            <span className="font-['PhotographSignature'] text-6xl text-[#F7C66A] block mb-2">Le Magazine</span>
+            <span className="font-['PhotographSignature'] text-6xl text-[#F7C66A] block mb-2">{t("aymag.script_title")}</span>
             <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-widest">AyMAG</h1>
             <p className="mt-6 max-w-2xl mx-auto text-white/70 leading-relaxed">
-              Plongez dans l'univers de l'immobilier de luxe, découvrez nos dernières réalisations, les tendances design et l'art de vivre selon Aymen Promotion.
+              {t("aymag.description")}
             </p>
           </div>
 

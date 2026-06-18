@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function CookieBanner() {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -49,29 +51,29 @@ export default function CookieBanner() {
                 <path d="M11 17v.01" />
                 <path d="M7 14v.01" />
               </svg>
-              Gestion des cookies
+              {t("cookie.title")}
             </h3>
             <p className="text-white/80 text-sm leading-relaxed">
-              Nous utilisons des cookies pour améliorer votre expérience de navigation, analyser le trafic de notre site et personnaliser le contenu conformément à la législation algérienne (Loi 18-07) et aux normes internationales (RGPD). 
+              {t("cookie.text")}
               <Link to="/confidentialite" className="text-[#F7C66A] hover:underline ml-1 font-medium">
-                En savoir plus
+                {t("cookie.learn_more")}
               </Link>
             </p>
           </div>
 
           {/* Boutons d'action */}
           <div className="flex flex-col sm:flex-row items-center gap-3 min-w-max">
-            <button 
+            <button
               onClick={handleDecline}
               className="px-6 py-2.5 rounded-full border border-white/20 text-white/90 text-xs font-bold uppercase tracking-widest hover:bg-white/10 transition-colors w-full sm:w-auto"
             >
-              Refuser
+              {t("cookie.decline")}
             </button>
-            <button 
+            <button
               onClick={handleAccept}
               className="px-6 py-2.5 rounded-full bg-[#F7C66A] text-[#031B17] border border-[#F7C66A] text-xs font-bold uppercase tracking-widest hover:bg-white hover:border-white hover:text-[#031B17] transition-all shadow-[0_0_15px_rgba(247,198,106,0.3)] w-full sm:w-auto"
             >
-              Accepter tout
+              {t("cookie.accept")}
             </button>
           </div>
 

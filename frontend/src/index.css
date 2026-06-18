@@ -15,6 +15,15 @@
   font-display: swap;
 }
 
+/* RTL support for Arabic */
+[dir="rtl"] {
+  font-family: "Montserrat", "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+[dir="rtl"] .tracking-\[0\.22em\] {
+  letter-spacing: 0.05em;
+}
+
 html {
   width: 100%;
   scroll-behavior: smooth;

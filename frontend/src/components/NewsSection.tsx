@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useBlogs } from "../hooks/useBlogs";
 import config from "../config";
 
 const STRAPI_URL = config.STRAPI_URL;
 
 export default function NewsSection() {
+  const { t } = useTranslation();
   const { blogs, loading, error } = useBlogs();
   const [visibleCount, setVisibleCount] = useState(3);
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -136,10 +138,10 @@ export default function NewsSection() {
         {/* Titre */}
         <div className="mb-16 flex flex-col items-center justify-center relative pt-24 md:pt-32">
           <h3 className="font-['PhotographSignature'] text-6xl md:text-8xl text-[#F7C66A] absolute top-4 md:top-8 left-1/2 -translate-x-1/2 z-10 whitespace-nowrap">
-            Actualités
+            {t("news.script_title")}
           </h3>
           <h2 className="text-2xl md:text-4xl font-bold uppercase tracking-widest text-white mt-8 z-0">
-            D'AYMEN PROMOTION
+            {t("news.main_title")}
           </h2>
         </div>
 
@@ -167,8 +169,8 @@ export default function NewsSection() {
           </button>
 
           {/* Carousel container */}
-          <div className="overflow-hidden">
-            <div 
+          <div className="overflow-hidden" dir="ltr">
+            <div
               ref={carouselRef}
               onTransitionEnd={handleTransitionEnd}
               className={`flex ${isTransitioning ? "transition-transform duration-500 ease-in-out" : ""}`}

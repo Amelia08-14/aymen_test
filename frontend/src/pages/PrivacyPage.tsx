@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export default function PrivacyPage() {
+  const { t } = useTranslation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -13,13 +15,13 @@ export default function PrivacyPage() {
       
       <main className="container mx-auto px-6 py-32 md:py-40 max-w-4xl">
         <h1 className="text-3xl md:text-4xl font-bold text-[#F7C66A] mb-8 uppercase tracking-widest">
-          Politique de Confidentialité
+          {t("privacy_page.title")}
         </h1>
         
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 space-y-6 text-gray-300 leading-relaxed font-light">
           <div className="p-4 bg-[#F7C66A]/10 border border-[#F7C66A] rounded-lg mb-8">
             <p className="text-[#F7C66A] font-bold text-sm text-center uppercase tracking-wider">
-              Document en cours de validation juridique
+              {t("privacy_page.legal_notice")}
             </p>
           </div>
 

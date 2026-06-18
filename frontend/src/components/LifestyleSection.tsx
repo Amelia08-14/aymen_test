@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-
-const categories = ["CUISINE", "SÉJOUR", "SUITE", "PISCINE", "SALLE D'EAU"];
+import { useTranslation } from "react-i18next";
 
 const categoryMap: Record<string, { folder: string; files: string[] }> = {
   "CUISINE": {
@@ -47,6 +46,14 @@ function ArrowIcon({ direction = "left" }: { direction?: "left" | "right" }) {
 }
 
 export default function LifestyleSection() {
+  const { t } = useTranslation();
+  const CATEGORIES = [
+    { key: "CUISINE", label: t("lifestyle.cat_cuisine") },
+    { key: "SÉJOUR", label: t("lifestyle.cat_sejour") },
+    { key: "SUITE", label: t("lifestyle.cat_suite") },
+    { key: "PISCINE", label: t("lifestyle.cat_piscine") },
+    { key: "SALLE D'EAU", label: t("lifestyle.cat_salle_deau") },
+  ];
   const [activeCat, setActiveCat] = useState("CUISINE");
   // REMOVED DUPLICATE index state here
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -176,31 +183,31 @@ export default function LifestyleSection() {
       <div>
         <div className="mb-8">
           <h3 className="mb-2 font-['PhotographSignature'] text-5xl text-gold-500">
-            Un Style de Vie
+            {t("lifestyle.script_title")}
           </h3>
-          <h2 className="text-3xl font-bold uppercase tracking-wider">LUXUEUX ET MODERNE</h2>
+          <h2 className="text-3xl font-bold uppercase tracking-wider">{t("lifestyle.main_title")}</h2>
         </div>
 
         <div className="mb-12 flex flex-wrap justify-center gap-2 md:gap-4 px-4">
-          {categories.map((cat) => (
+          {CATEGORIES.map((cat) => (
             <button
-              key={cat}
-              onClick={() => setActiveCat(cat)}
+              key={cat.key}
+              onClick={() => setActiveCat(cat.key)}
               className={`rounded-full border px-4 py-2 text-xs md:text-sm font-semibold uppercase tracking-wide transition-all
                 ${
-                  activeCat === cat
+                  activeCat === cat.key
                     ? "border-gold-500 bg-gold-500 text-black"
                     : "border-white/30 text-white/70 hover:border-white hover:text-white"
                 }
               `}
             >
-              {cat}
+              {cat.label}
             </button>
           ))}
         </div>
 
         <div className="mx-auto max-w-6xl px-0 md:px-10">
-          <div className="relative" ref={containerRef}>
+          <div className="relative" ref={containerRef} dir="ltr">
             <div
               ref={trackRef}
               onTransitionEnd={handleTransitionEnd}
@@ -281,7 +288,7 @@ export default function LifestyleSection() {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  aria-label="Precedent"
+                  aria-label={t("lifestyle.prev")}
                   className="pointer-events-auto absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#031B17] shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition hover:bg-[#C2A15C] hover:text-black"
                 >
                   <ArrowIcon direction="left" />
@@ -289,7 +296,7 @@ export default function LifestyleSection() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  aria-label="Suivant"
+                  aria-label={t("lifestyle.next")}
                   className="pointer-events-auto absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#031B17] shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition hover:bg-[#C2A15C] hover:text-black"
                 >
                   <ArrowIcon direction="right" />

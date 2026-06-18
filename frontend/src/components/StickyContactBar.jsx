@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function StickyContactBar() {
+  const { t } = useTranslation();
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [pinnedIndex, setPinnedIndex] = useState(null);
 
@@ -9,7 +11,7 @@ export default function StickyContactBar() {
     {
       id: "phone",
       icon: "fa-phone",
-      label: "Téléphoner",
+      label: t("sticky_bar.call"),
       href: "tel:+213560582959",
       color: "text-white",
       type: "link"
@@ -17,15 +19,14 @@ export default function StickyContactBar() {
     {
       id: "write",
       icon: "fa-pen-to-square",
-      // Content handled specially
-      type: "custom" 
+      type: "custom"
     },
     {
       id: "contact",
       icon: "fa-calendar-days",
-      label: "Prendre Rendez-vous",
+      label: t("sticky_bar.appointment"),
       href: "/contact",
-      type: "route" // internal link
+      type: "route"
     }
   ];
 

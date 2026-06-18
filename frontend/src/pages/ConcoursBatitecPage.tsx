@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export default function ConcoursBatitecPage() {
+  const { t } = useTranslation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -27,10 +29,10 @@ export default function ConcoursBatitecPage() {
               Batitec
             </span>
             <h1 className="text-2xl md:text-4xl font-bold uppercase tracking-wide">
-                Concours d’Architecture
+                {t("batitec.title")}
             </h1>
             <div className="mt-6 inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm text-white/85">
-              Les candidatures ont été clôturées.
+              {t("batitec.closed")}
             </div>
           </div>
 
@@ -49,16 +51,16 @@ export default function ConcoursBatitecPage() {
               </div>
 
               <div className="relative p-7 md:p-9">
-                <div className="text-xs uppercase tracking-[0.22em] text-white/55 mb-2">Catégorie</div>
+                <div className="text-xs uppercase tracking-[0.22em] text-white/55 mb-2">{t("batitec.category")}</div>
                 <div className="text-2xl md:text-3xl font-bold uppercase tracking-wide text-[#F7C66A]">
-                  Hôtel
+                  {t("batitec.hotel")}
                 </div>
                 <p className="mt-4 text-sm text-white/70 leading-relaxed">
-                  Concours de concept architectural – Hôtel.
+                  {t("batitec.hotel_desc")}
                 </p>
 
                 <div className="mt-7 inline-flex items-center gap-3 rounded-full border border-white/15 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white/70">
-                  Candidatures clôturées
+                  {t("batitec.applications_closed")}
                 </div>
               </div>
             </div>
@@ -77,16 +79,16 @@ export default function ConcoursBatitecPage() {
               </div>
 
               <div className="relative p-7 md:p-9">
-                <div className="text-xs uppercase tracking-[0.22em] text-white/55 mb-2">Catégorie</div>
+                <div className="text-xs uppercase tracking-[0.22em] text-white/55 mb-2">{t("batitec.category")}</div>
                 <div className="text-2xl md:text-3xl font-bold uppercase tracking-wide text-[#F7C66A]">
-                  Villa
+                  {t("batitec.villa")}
                 </div>
                 <p className="mt-4 text-sm text-white/70 leading-relaxed">
-                  Conception d’une villa résidentielle (villa collective).
+                  {t("batitec.villa_desc")}
                 </p>
 
                 <div className="mt-7 inline-flex items-center gap-3 rounded-full border border-white/15 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-white/70">
-                  Candidatures clôturées
+                  {t("batitec.applications_closed")}
                 </div>
               </div>
             </div>

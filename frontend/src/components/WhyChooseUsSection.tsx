@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
+// Stats labels are now handled via t() in the component
 const stats = [
   {
     id: 1,
@@ -10,7 +12,7 @@ const stats = [
         </svg>
       </div>
     ),
-    label: "D'EXPERIENCE",
+    labelKey: "why_us.stat_experience",
   },
   {
     id: 2,
@@ -19,7 +21,7 @@ const stats = [
         <img src="/+30.png" alt="Plus de 30 résidences haut standing réalisées par Aymen Promotion à Alger" className="w-32 h-auto" />
       </div>
     ),
-    label: "RÉSIDENCES HAUT STANDING",
+    labelKey: "why_us.stat_residences",
   },
   {
     id: 3,
@@ -28,7 +30,7 @@ const stats = [
         <img src="/+15.png" alt="Plus de 15 communes prestigieuses couvertes par Aymen Promotion à Alger" className="w-28 h-auto" />
       </div>
     ),
-    label: "COMMUNES PRESTIGIEUSES",
+    labelKey: "why_us.stat_communes",
   },
   {
     id: 4,
@@ -37,11 +39,12 @@ const stats = [
         <img src="/+1500.png" alt="Plus de 1500 appartements livrés par Aymen Promotion à Alger" className="w-40 h-auto" />
       </div>
     ),
-    label: "APPARTEMENTS LIVRÉS",
+    labelKey: "why_us.stat_apartments",
   },
 ];
 
 export default function WhyChooseUsSection() {
+  const { t } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -54,33 +57,29 @@ export default function WhyChooseUsSection() {
   return (
     <section className="py-12 text-center text-white">
       <div className="mb-8">
-        <h3 className="font-['PhotographSignature'] text-5xl text-[#F7C66A]">Pourquoi</h3>
-        <h2 className="mt-2 text-3xl md:text-4xl font-bold uppercase tracking-wider">NOUS CHOISIR ?</h2>
+        <h3 className="font-['PhotographSignature'] text-5xl text-[#F7C66A]">{t("why_us.script_title")}</h3>
+        <h2 className="mt-2 text-3xl md:text-4xl font-bold uppercase tracking-wider">{t("why_us.main_title")}</h2>
       </div>
 
-      {/* Cards Section alignée */}
- {/* Cards Section corrigée */}
+      {/* Cards Section */}
       <div className="mx-auto mb-20 grid max-w-6xl grid-cols-1 gap-8 px-6 md:grid-cols-3 items-stretch">
         {[
           {
             id: 1,
-            title: "AMÉNAGEMENT",
-            description:
-              "Transformez votre espace de vie avec notre service d'aménagement intérieur...",
+            title: t("why_us.card_amenagement_title"),
+            description: t("why_us.card_amenagement_desc"),
             icon: "/choose.svg",
           },
           {
             id: 2,
-            title: "GESTION DE COPROPRIÉTÉ",
-            description:
-              "Notre service de gestion assure une sécurité 24h/24, l'entretien des espaces collectifs...",
+            title: t("why_us.card_gestion_title"),
+            description: t("why_us.card_gestion_desc"),
             icon: "/management.svg",
           },
           {
             id: 3,
-            title: "LOCAUX COMMERCIAUX",
-            description:
-              "Boostez votre activité avec nos locaux commerciaux en location dans des zones stratégiques...",
+            title: t("why_us.card_locaux_title"),
+            description: t("why_us.card_locaux_desc"),
             icon: "/commercial.svg",
           },
         ].map((card) => (
@@ -128,7 +127,7 @@ export default function WhyChooseUsSection() {
                      {stats[0].value}
                  </div>
                  <div className="text-xl uppercase tracking-[0.3em] text-white font-light mt-2 text-center">
-                     {stats[0].label}
+                     {t(stats[0].labelKey)}
                  </div>
               </div>
               
@@ -139,7 +138,7 @@ export default function WhyChooseUsSection() {
                          {stats[1].value}
                      </div>
                      <span className="text-[8px] uppercase tracking-[0.1em] text-white text-center leading-relaxed font-light mt-1">
-                       RÉSIDENCES HAUT<br/>STANDING
+                       {t("why_us.stat_residences")}
                      </span>
                   </div>
                   
@@ -149,7 +148,7 @@ export default function WhyChooseUsSection() {
                          {stats[2].value}
                      </div>
                      <span className="text-[8px] uppercase tracking-[0.1em] text-white text-center leading-relaxed font-light mt-1">
-                       COMMUNES<br/>PRESTIGIEUSES
+                       {t("why_us.stat_communes")}
                      </span>
                   </div>
                   
@@ -159,7 +158,7 @@ export default function WhyChooseUsSection() {
                          {stats[3].value}
                      </div>
                      <span className="text-[8px] uppercase tracking-[0.1em] text-white text-center leading-relaxed font-light mt-1">
-                       APPARTEMENTS<br/>LIVRÉS
+                       {t("why_us.stat_apartments")}
                      </span>
                   </div>
                </div>
@@ -172,7 +171,7 @@ export default function WhyChooseUsSection() {
                   {stat.value}
                 </div>
                 <div className="text-base md:text-lg tracking-[0.2em] uppercase text-white w-full leading-relaxed font-light">
-                {stat.label}
+                {t(stat.labelKey)}
               </div>
               </div>
             ))}

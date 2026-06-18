@@ -1,10 +1,12 @@
-  import React from "react";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function FloatingActions() {
+  const { t } = useTranslation();
   const items = [
-    { label: "Téléphone", desc: "Appeler maintenant", icon: PhoneIcon },
-    { label: "Écrire", desc: "WhatsApp / Email", icon: EditIcon },
-    { label: "RDV", desc: "Planifier une visite", icon: CalendarIcon },
+    { label: "Téléphone", desc: t("floating.call_now"), icon: PhoneIcon },
+    { label: t("floating.write"), desc: t("floating.whatsapp"), icon: EditIcon },
+    { label: t("floating.rdv"), desc: t("floating.schedule_visit"), icon: CalendarIcon },
   ];
 
   return (

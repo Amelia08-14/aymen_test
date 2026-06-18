@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link, useLocation } from "react-router-dom";
@@ -10,6 +11,7 @@ import config from "../config";
 const STRAPI_URL = config.STRAPI_URL;
 
 export default function BlogPage() {
+  const { t } = useTranslation();
   const { blogs, loading, error } = useBlogs();
   const [activeCategory, setActiveCategory] = useState("Tous");
   const [visibleCount, setVisibleCount] = useState(6); // Pagination start
@@ -71,11 +73,10 @@ export default function BlogPage() {
           transition={{ duration: 0.8 }}
         >
           <span className="font-['PhotographSignature'] text-6xl md:text-8xl text-[#F7C66A] block mb-2">
-            Le Blog
+            {t("blog.script_title")}
           </span>
           <h1 className="text-2xl md:text-4xl font-bold uppercase tracking-widest text-white">
-            SUR L'IMMOBILIER<br />
-            ALGÉRIEN
+            {t("blog.main_title")}
           </h1>
         </motion.div>
 
@@ -122,7 +123,7 @@ export default function BlogPage() {
                                 />
                               ) : (
                                 <div className="w-full h-full bg-gray-800 flex items-center justify-center text-white/20">
-                                  Aucune image
+                                  {t("blog.no_image")}
                                 </div>
                               )}
                              </Link>
@@ -153,7 +154,7 @@ export default function BlogPage() {
                             to={`/blog/${post.attributes.slug}`}
                             className="text-[#F7C66A] font-bold text-[10px] uppercase tracking-widest hover:text-white transition-colors"
                           >
-                            + LIRE L'ARTICLE
+                            {t("blog.read_article")}
                           </Link>
                         </div>
                       </div>
@@ -168,7 +169,7 @@ export default function BlogPage() {
                     onClick={handleLoadMore}
                     className="bg-[#F7C66A] text-[#031B17] px-8 py-3 rounded-md font-bold text-sm uppercase tracking-wide hover:bg-white transition-colors shadow-lg"
                   >
-                    Voir plus
+                    {t("blog.load_more")}
                   </button>
                 </div>
               )}
@@ -208,13 +209,11 @@ export default function BlogPage() {
             <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center text-[#031B17]">
                <div className="mb-6 flex flex-col items-start">
                  <img src="/logo_black.png" alt="Logo Aymen Promotion, promoteur immobilier Alger depuis 2006" className="h-16 mb-2" />
-                 <p className="font-['PhotographSignature'] text-xl text-gray-800 ml-1">Frappez à la Bonne Porte</p>
+                 <p className="font-['PhotographSignature'] text-xl text-gray-800 ml-1">{t("blog.newsletter_script")}</p>
                </div>
-               
+
                <h2 className="text-3xl md:text-5xl font-light mb-10 leading-tight">
-                 Restez au coeur de<br/>
-                 <span className="font-normal">l'actualité du haut</span><br/>
-                 <span className="font-normal">standing</span>
+                 {t("blog.newsletter_title")}
                </h2>
 
                <div className="relative w-full max-w-md border border-gray-400 rounded-full">

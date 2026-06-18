@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import HamburgerIcon from "./icons/HamburgerIcon";
 import MenuOverlay from "./MenuOverlay";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Header({ logoSrc = "/logo_original.svg", className = "" }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -43,16 +46,19 @@ export default function Header({ logoSrc = "/logo_original.svg", className = "" 
             />
           </Link>
 
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="group inline-flex items-center gap-3 text-white/90"
-            aria-label="Ouvrir le menu"
-          >
-            <span className="text-base font-medium">Menu</span>
-            <span className="text-white/50">|</span>
-            <HamburgerIcon className="h-6 w-7 text-white" />
-          </button>
+          <div className="flex items-center gap-4">
+            <LanguageSwitcher variant="compact" />
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="group inline-flex items-center gap-3 text-white/90"
+              aria-label={t("nav.open_menu")}
+            >
+              <span className="text-base font-medium">{t("nav.menu")}</span>
+              <span className="text-white/50">|</span>
+              <HamburgerIcon className="h-6 w-7 text-white" />
+            </button>
+          </div>
         </div>
       </header>
 

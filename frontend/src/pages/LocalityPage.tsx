@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { LOCALITIES, PROJECTS as MOCK_PROJECTS, Project, Locality } from "../data/mockData";
@@ -54,8 +55,9 @@ function LocationPinIcon() {
 }
 
 function ProjectCard({ project }: { project: Project }) {
+  const { t } = useTranslation();
   return (
-    <Link 
+    <Link
       to={`/projet/${project.title.toLowerCase()}`}
       className="group relative flex h-full overflow-hidden rounded-lg bg-[#052620] shadow-lg transition hover:shadow-2xl animate-fadeInUp"
     >
@@ -74,7 +76,7 @@ function ProjectCard({ project }: { project: Project }) {
           </p>
         </div>
         <span className="w-fit text-xs font-bold uppercase tracking-widest text-[#F7C66A] transition hover:text-white border-b border-transparent hover:border-white pb-0.5">
-          DÉCOUVRIR
+          {t("locality_page.discover")}
         </span>
       </div>
 
@@ -97,6 +99,7 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 function MapCard({ projects, locality }: { projects: Project[], locality: Locality }) {
+  const { t } = useTranslation();
   const [selectedProject, setSelectedProject] = useState<Project | null>(projects[0] || null);
   const navigate = useNavigate();
 
@@ -190,11 +193,11 @@ function MapCard({ projects, locality }: { projects: Project[], locality: Locali
 
                   {/* Bottom: Actions */}
                   <div className="flex items-center justify-between pt-2 border-t border-white/5 mt-1">
-                     <Link 
+                     <Link
                         to={`/projet/${p.title.toLowerCase()}`}
                         className="text-[10px] font-bold uppercase tracking-widest text-white/70 hover:text-[#F7C66A] transition-colors"
                      >
-                        DÉCOUVRIR
+                        {t("locality_page.discover")}
                      </Link>
                      
                      {p.mapLinkUrl || (p.lat && p.lng) ? (
@@ -225,6 +228,7 @@ function MapCard({ projects, locality }: { projects: Project[], locality: Locali
 }
 
 export default function LocalityPage() {
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [dbProjects, setDbProjects] = useState<Project[]>([]);
@@ -359,7 +363,7 @@ export default function LocalityPage() {
                 {!isMobile && (
                     <>
                         <p className="text-sm md:text-base leading-relaxed text-gray-200 font-light max-w-xl text-justify mt-8">
-                            {locality.description}
+                            {t(`locality_desc.${locality.id}`, { defaultValue: locality.description })}
                         </p>
                     </>
                 )}
@@ -377,7 +381,7 @@ export default function LocalityPage() {
              <div className="container mx-auto">
                 <div className="w-8 h-1 bg-[#F7C66A] mb-6 rounded-full shadow-lg"></div>
                 <p className="text-sm leading-relaxed text-gray-200 font-light text-justify">
-                    {locality.description}
+                    {t(`locality_desc.${locality.id}`, { defaultValue: locality.description })}
                 </p>
              </div>
           </section>

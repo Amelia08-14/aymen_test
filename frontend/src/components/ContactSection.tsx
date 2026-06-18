@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { API_BASE_URL } from "../config";
 
 export default function ContactSection() {
+  const { t } = useTranslation();
   const ref = useRef<HTMLDivElement | null>(null);
-  const [phase, setPhase] = useState(0); // 0 none, 1 bg, 2 panels, 3 content
+  const [phase, setPhase] = useState(0);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -23,7 +25,7 @@ export default function ContactSection() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!consent) {
-        setStatus({ type: 'error', message: "Veuillez accepter le consentement." });
+        setStatus({ type: 'error', message: t("contact_section.error_consent") });
         return;
     }
 
@@ -44,15 +46,15 @@ export default function ContactSection() {
       const data = await response.json();
 
       if (response.ok) {
-        setStatus({ type: 'success', message: "Message envoyé avec succès !" });
+        setStatus({ type: 'success', message: t("contact_section.success_message") });
         setFormData({ fullName: "", phone: "", email: "", message: "" });
         setConsent(false);
       } else {
-        setStatus({ type: 'error', message: data.message || "Une erreur est survenue." });
+        setStatus({ type: 'error', message: data.message || t("contact_section.error_generic") });
       }
     } catch (error) {
       console.error("Erreur:", error);
-      setStatus({ type: 'error', message: "Erreur serveur. Veuillez réessayer." });
+      setStatus({ type: 'error', message: t("contact_section.error_server") });
     } finally {
       setLoading(false);
     }
@@ -160,8 +162,8 @@ export default function ContactSection() {
             {/* Logo hidden on mobile, visible on desktop if needed, but simplified here */}
             
             <div className="mb-8 md:mb-12 space-y-1 md:space-y-2">
-              <div className="text-3xl md:text-4xl font-extrabold tracking-wide text-[#F7C66A] md:text-5xl">EXPRIMEZ</div>
-              <div className="text-3xl md:text-4xl font-regular tracking-wide text-white md:text-5xl">VOTRE INTÉRÊT</div>
+              <div className="text-3xl md:text-4xl font-extrabold tracking-wide text-[#F7C66A] md:text-5xl">{t("contact_section.title_bold")}</div>
+              <div className="text-3xl md:text-4xl font-regular tracking-wide text-white md:text-5xl">{t("contact_section.title_regular")}</div>
             </div>
 
           </div>
@@ -190,15 +192,15 @@ export default function ContactSection() {
                   <div className="w-20 h-20 mx-auto mb-6 bg-green-500/30 rounded-full flex items-center justify-center">
                     <i className="fa-solid fa-check text-4xl text-green-300"></i>
                   </div>
-                  <h3 className="text-2xl font-medium text-green-300 mb-3">Message envoyé !</h3>
+                  <h3 className="text-2xl font-medium text-green-300 mb-3">{t("contact_section.success_title")}</h3>
                   <p className="text-green-200 mb-6 text-base">
-                    {status.message || "Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais."}
+                    {status.message || t("contact_section.success_message")}
                   </p>
-                  <button 
+                  <button
                     onClick={() => setStatus({ type: null, message: "" })}
                     className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium shadow-md text-sm"
                   >
-                    Envoyer un nouveau message
+                    {t("contact_section.new_message")}
                   </button>
                 </div>
               </div>
@@ -206,7 +208,7 @@ export default function ContactSection() {
               <form onSubmit={handleSubmit} className="w-full max-w-xl pb-10 md:pb-0">
                 <div className="grid grid-cols-1 gap-6">
                     <label className="block">
-                      <span className="mb-1 block text-xs md:text-sm text-white/60 uppercase tracking-wider">NOM</span>
+                      <span className="mb-1 block text-xs md:text-sm text-white/60 uppercase tracking-wider">{t("contact_section.label_name")}</span>
                       <input
                           type="text"
                           name="fullName"
@@ -217,7 +219,7 @@ export default function ContactSection() {
                         />
                     </label>
                     <label className="block">
-                      <span className="mb-1 block text-xs md:text-sm text-white/60 uppercase tracking-wider">TÉLÉPHONE</span>
+                      <span className="mb-1 block text-xs md:text-sm text-white/60 uppercase tracking-wider">{t("contact_section.label_phone")}</span>
                       <input
                           type="tel"
                           name="phone"
@@ -228,7 +230,7 @@ export default function ContactSection() {
                         />
                     </label>
                     <label className="block">
-                      <span className="mb-1 block text-xs md:text-sm text-white/60 uppercase tracking-wider">EMAIL</span>
+                      <span className="mb-1 block text-xs md:text-sm text-white/60 uppercase tracking-wider">{t("contact_section.label_email")}</span>
                       <input
                           type="email"
                           name="email"
@@ -239,7 +241,7 @@ export default function ContactSection() {
                         />
                     </label>
                     <label className="block">
-                      <span className="mb-1 block text-xs md:text-sm text-white/60 uppercase tracking-wider">MESSAGE</span>
+                      <span className="mb-1 block text-xs md:text-sm text-white/60 uppercase tracking-wider">{t("contact_section.label_message")}</span>
                       <textarea
                           name="message"
                           value={formData.message}
@@ -260,7 +262,7 @@ export default function ContactSection() {
                           className="mt-1 w-3 h-3 accent-[#F7C66A] bg-transparent border-white/30 rounded" 
                       />
                       <span className="text-[10px] text-white/60 leading-tight">
-                        CONSENTEMENT : J'accepte que mes données soient utilisées pour le traitement de ma demande en conformité avec la loi 18-07 révisée et compléter par la loi 11-25.
+                        {t("contact_section.consent")}
                       </span>
                    </label>
                 </div>
@@ -281,10 +283,10 @@ export default function ContactSection() {
                     {loading ? (
                       <>
                         <div className="animate-spin rounded-full h-3 w-3 border-2 border-white border-t-transparent"></div>
-                        ENVOI...
+                        {t("contact_section.sending")}
                       </>
                     ) : (
-                      'PRENDRE CONTACT'
+                      t("contact_section.submit")
                     )}
                   </button>
                 </div>

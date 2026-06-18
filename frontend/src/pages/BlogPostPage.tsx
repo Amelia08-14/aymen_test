@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useBlogData } from "../hooks/useBlogData";
@@ -10,6 +11,7 @@ import config from "../config";
 const STRAPI_URL = config.STRAPI_URL;
 
 export default function BlogPostPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>(); // 'id' here is actually the slug
   const { data, loading, error } = useBlogData(id);
 
@@ -29,8 +31,8 @@ export default function BlogPostPage() {
     return (
       <div className="min-h-screen bg-[#031B17] flex items-center justify-center text-white">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Article non trouvé</h1>
-          <p className="text-gray-400">Une erreur est survenue lors du chargement de l'article.</p>
+          <h1 className="text-2xl font-bold mb-4">{t("blog.not_found")}</h1>
+          <p className="text-gray-400">{t("blog.load_error")}</p>
         </div>
       </div>
     );

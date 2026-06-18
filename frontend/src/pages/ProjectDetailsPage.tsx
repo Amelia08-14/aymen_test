@@ -1,11 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { PROJECTS } from "../data/mockData";
 import { API_BASE_URL } from "../config";
 import PlanVuesTabs from "../components/interactive/PlanVuesTabs";
 import { INTERACTIVE_DATA } from "../data/interactiveData";
+
+// Map French feature names to i18n keys for translation
+const AMENITY_I18N_KEY: Record<string, string> = {
+  "climatisation centralisée": "climatisation",
+  "reception": "reception",
+  "bache a eau": "bache_eau",
+  "ascenseur": "ascenseur",
+  "cuisine": "cuisine",
+  "groupe electrogene": "groupe_electrogene",
+  "groupe electrogène": "groupe_electrogene",
+  "abattoir": "abattoir",
+  "parking de stationnement": "parking",
+  "domotique": "domotique",
+  "dressing": "dressing",
+  "isolation phonique": "isolation_phonique",
+  "aire de jeux": "aire_jeux",
+  "piscine commune": "piscine_commune",
+  "piscine privative": "piscine_privative",
+  "fenetre": "fenetre",
+  "fenêtre": "fenetre",
+  "salle d'eau": "salle_eau",
+  "salle de sport": "salle_sport",
+  "spa hammam sauna": "spa",
+  "spa": "spa",
+  "gestion copropriété": "gestion_copropriete",
+  "gestion copropriete": "gestion_copropriete",
+  "creche garderie": "creche",
+  "crèche garderie": "creche",
+};
 
 // --- Amenities Configuration ---
 const AMENITIES_ICONS: Record<string, string> = {
@@ -59,6 +89,7 @@ type Plan = ProjectData["plans"][0];
 type LocationData = ProjectData["location"];
 
 export default function ProjectDetailsPage() {
+  const { t } = useTranslation();
   const { slug } = useParams();
   
   // Utilise le slug (en minuscule) pour trouver le projet, 
@@ -80,8 +111,8 @@ export default function ProjectDetailsPage() {
     return (
       <div className="flex h-screen items-center justify-center bg-[#031B17] text-white">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-[#F7C66A]">Projet introuvable</h1>
-          <p className="mt-4 text-lg">Le projet que vous cherchez n'existe pas ou a été déplacé.</p>
+          <h1 className="text-4xl font-bold text-[#F7C66A]">{t("project_details.not_found")}</h1>
+          <p className="mt-4 text-lg">{t("project_details.not_found_desc")}</p>
         </div>
       </div>
     );
@@ -96,7 +127,7 @@ export default function ProjectDetailsPage() {
   // Transform project data to component format
   const projectData: ProjectData = {
     title: `RÉSIDENCE ${project.title}`,
-    status: project.status === "EN COURS" ? "EN COURS DE RÉALISATION" : "PROJET TERMINÉ",
+    status: project.status === "EN COURS" ? t("project_details.status_ongoing") : t("project_details.status_finished"),
     description: project.fullDescription || project.description,
     stats: {
       address: project.location.split(',')[0].trim(), // Prend seulement la ville (ex: "Kouba")
@@ -106,11 +137,15 @@ export default function ProjectDetailsPage() {
       surface: surfaceDetail?.value,
     },
     heroImage: project.coverImage || project.image,
-    amenities: (project.features || []).map(f => ({
-      label: f,
-      iconSrc: AMENITIES_ICONS[f] || undefined,
-      fallbackIcon: !AMENITIES_ICONS[f] ? "fa-solid fa-check" : undefined
-    })),
+    amenities: (project.features || []).map(f => {
+      const i18nKey = AMENITY_I18N_KEY[f.toLowerCase()];
+      const translatedLabel = i18nKey ? t(`amenities.${i18nKey}`, f) : f;
+      return {
+        label: translatedLabel,
+        iconSrc: AMENITIES_ICONS[f] || undefined,
+        fallbackIcon: !AMENITIES_ICONS[f] ? "fa-solid fa-check" : undefined
+      };
+    }),
     gallery: galleryImages,
     plans: (project.plans || []).map(p => ({
         type: p.type, // Maintenant on utilise p.type car c'est la structure dans mockData
@@ -188,6 +223,7 @@ export default function ProjectDetailsPage() {
 // --- Sub-components ---
 
 function DetailsHero({ data }: { data: ProjectData }) {
+  const { t } = useTranslation();
   // Extract just the name if title is "RÉSIDENCE NAME"
   const projectName = data.title.replace("RÉSIDENCE ", "");
 
@@ -215,11 +251,11 @@ function DetailsHero({ data }: { data: ProjectData }) {
               </p>
 
               <div className="flex flex-wrap gap-4">
-                <StatBox label="Adresse" value={data.stats.address} />
-                {data.stats.typologie && <StatBox label="Typologie" value={data.stats.typologie} />}
-                {data.stats.surface && <StatBox label="Surface" value={data.stats.surface} />}
-                <StatBox label="Blocs" value={data.stats.blocs} />
-                <StatBox label="État d'avancement" value={data.stats.progress} />
+                <StatBox label={t("project_details.address")} value={data.stats.address} />
+                {data.stats.typologie && <StatBox label={t("project_details.typology")} value={data.stats.typologie} />}
+                {data.stats.surface && <StatBox label={t("project_details.surface")} value={data.stats.surface} />}
+                <StatBox label={t("project_details.blocs")} value={data.stats.blocs} />
+                <StatBox label={t("project_details.progress")} value={data.stats.progress} />
               </div>
             </div>
           </div>

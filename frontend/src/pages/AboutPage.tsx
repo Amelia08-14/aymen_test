@@ -1,41 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 // --- Mock Data ---
 
-const VALUES = [
-  { 
-    id: 1, 
-    title: "Excellence", 
-    description: "Chaque projet est réalisé et pensé avec minutie, et l'excellence se manifeste dans chaque détail",
-    icon: <ValueIcon1 /> 
-  },
-  { 
-    id: 2, 
-    title: "Innovation", 
-    description: "Nous construisons des appartements où les nouvelles technologies simplifient et améliorent votre quotidien.",
-    icon: <ValueIcon2 /> 
-  },
-  { 
-    id: 3, 
-    title: "Engagement", 
-    description: "À chaque étape du processus, vous pouvez compter sur nous, ce qui vous permettra de nous faire confiance et d’être certain que vos attentes seront réalisées",
-    icon: <ValueIcon3 /> 
-  },
-  { 
-    id: 4, 
-    title: "Luxe", 
-    description: "Chaque détail conçu pour votre confort, avec des finitions raffinées apportant un plaisir quotidien, pour trouver le luxe que vous désirez",
-    icon: <ValueIcon4 /> 
-  },
-  { 
-    id: 5, 
-    title: "Fiabilité", 
-    description: "Nous construisons chaque résidence sur des fondations solides, pour que vous puissiez compter sur nous et vivre sereinement aujourd'hui et demain",
-    icon: <ValueIcon5 /> 
-  },
+const VALUES_KEYS = [
+  { id: 1, titleKey: "about.value_excellence_title", descKey: "about.value_excellence_desc", icon: <ValueIcon1 /> },
+  { id: 2, titleKey: "about.value_innovation_title", descKey: "about.value_innovation_desc", icon: <ValueIcon2 /> },
+  { id: 3, titleKey: "about.value_engagement_title", descKey: "about.value_engagement_desc", icon: <ValueIcon3 /> },
+  { id: 4, titleKey: "about.value_luxe_title", descKey: "about.value_luxe_desc", icon: <ValueIcon4 /> },
+  { id: 5, titleKey: "about.value_fiabilite_title", descKey: "about.value_fiabilite_desc", icon: <ValueIcon5 /> },
 ];
 
 const TESTIMONIALS = [
@@ -260,10 +236,18 @@ function ValueIcon6() { // Confiance & transparence
 // --- Page Component ---
 
 export default function AboutPage() {
+  const { t } = useTranslation();
+
+  const VALUES = VALUES_KEYS.map(v => ({
+    ...v,
+    title: t(v.titleKey),
+    description: t(v.descKey),
+  }));
+
   const [activeFaqCategory, setActiveFaqCategory] = useState(0);
   const [activeFaqIndex, setActiveFaqIndex] = useState(0);
-  const [activeValueId, setActiveValueId] = useState(3); // Default active value (Excellence Partagée)
-  const [activeTestimonialId, setActiveTestimonialId] = useState(2); // Center testimonial active by default
+  const [activeValueId, setActiveValueId] = useState(3);
+  const [activeTestimonialId, setActiveTestimonialId] = useState(2);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -320,22 +304,22 @@ export default function AboutPage() {
                     <>
                          <div className="w-8 h-1 bg-white mb-4 rounded-full shadow-lg"></div>
                          <h1 className="text-3xl font-bold text-white mb-6 leading-tight drop-shadow-lg uppercase">
-                            A PROPOS
+                            {t("about.hero_title")}
                          </h1>
                          <div className="relative">
-                            <p className="text-sm leading-relaxed text-gray-200 font-light text-justify">
-                              Depuis <strong className="text-white font-bold">20 ans</strong>, Aymen Promotion façonne l'immobilier de demain en Algérie avec plus de <strong className="text-white font-bold">30 projets</strong>  dans <strong className="text-white font-bold">15 communes</strong>. Nous concevons des <strong className="text-white font-bold">résidences de Haut Standing </strong>où la qualité où le confort et la qualité se rencontrent pour offrir un cadre de vie luxueux
-                            </p>
+                            <p className="text-sm leading-relaxed text-gray-200 font-light text-justify"
+                              dangerouslySetInnerHTML={{ __html: t("about.hero_desc_html") }}
+                            />
                          </div>
                     </>
                 ) : (
                     <>
                         <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-wide text-white mb-6">
-                        A PROPOS
+                        {t("about.hero_title")}
                         </h1>
-                        <p className="text-sm md:text-lg leading-relaxed text-gray-200 font-light max-w-xl text-justify">
-                        Depuis <strong className="text-white font-bold">20 ans</strong>, Aymen Promotion façonne l'immobilier de demain en Algérie avec plus de <strong className="text-white font-bold">30 projets</strong>  dans <strong className="text-white font-bold">15 communes</strong>. Nous concevons des <strong className="text-white font-bold">résidences de Haut Standing </strong>où la qualité où le confort et la qualité se rencontrent pour offrir un cadre de vie luxueux
-                        </p>
+                        <p className="text-sm md:text-lg leading-relaxed text-gray-200 font-light max-w-xl text-justify"
+                          dangerouslySetInnerHTML={{ __html: t("about.hero_desc_html") }}
+                        />
                     </>
                 )}
               </motion.div>
@@ -357,10 +341,10 @@ export default function AboutPage() {
              transition={{ duration: 1.0, ease: "easeOut" }}
            >
              <span className="font-['PhotographSignature'] text-6xl md:text-7xl text-[#F7C66A] block mb-2">
-               Mot Du
+               {t("about.ceo_script")}
              </span>
              <h2 className="text-2xl md:text-4xl font-bold uppercase tracking-widest text-white">
-               PRÉSIDENT-DIRECTEUR<br/>GÉNÉRAL
+               {t("about.ceo_title")}
              </h2>
            </motion.div>
            
@@ -371,25 +355,13 @@ export default function AboutPage() {
              viewport={{ once: true, amount: 0.3 }}
              transition={{ duration: 1.0, delay: 0.2, ease: "easeOut" }}
            >
-             <p>Chers Clients et Amis d’Aymen Promotion Immobilière</p>
-             <p>
-               Depuis nos humbles débuts, nous avons parcouru un chemin extraordinaire, façonnant des espaces de vie qui incarnent le luxe, le confort et l'élégance. Au fil de ces années d'efforts acharnés, nous avons développé une expertise inégalée dans la conception, la création et la vente de résidences prestigieuses et d'appartements haut standing, redéfinissant ainsi les normes de l'industrie immobilière en Algérie.
-             </p>
-             <p>
-               Le nom d'Aymen Promotion Immobilière est devenu synonyme d'excellence, de qualité et de savoir-faire. Chaque projet que nous entreprenons est une œuvre d'art en soi, résultat de l'engagement passionné de nos équipes, experts dans leurs domaines respectifs, et de notre désir constant de repousser les limites de l'innovation.
-             </p>
-             <p>
-               Aujourd'hui, avec plus de vingt années d'expérience dans le secteur immobilier en Algérie, nous sommes témoins du chemin parcouru et maintenons la vision qui nous guide depuis toujours : créer des espaces qui transcendent les attentes, des lieux où l'art de vivre rencontre la perfection architecturale.
-             </p>
-             <p>
-               À travers ce catalogue, nous espérons vous offrir une abondance d'informations sur notre entreprise, nos résidences ainsi que nos services, pour mieux vous aider et vous accompagner dans votre démarche d'acquisition d'un bien immobilier.
-             </p>
-             <p>
-               Au nom de toute l'équipe d'Aymen Promotion Immobilière, je tiens à vous exprimer ma gratitude la plus sincère pour votre soutien continu et votre confiance. Ensemble, nous continuerons à écrire l'histoire de l'excellence immobilière, une page à la fois.
-             </p>
-             <p className="font-bold italic text-white mt-8">
-               Avec tout mon respect et ma reconnaissance
-             </p>
+             <p>{t("about.ceo_salute")}</p>
+             <p>{t("about.ceo_p1")}</p>
+             <p>{t("about.ceo_p2")}</p>
+             <p>{t("about.ceo_p3")}</p>
+             <p>{t("about.ceo_p4")}</p>
+             <p>{t("about.ceo_p5")}</p>
+             <p className="font-bold italic text-white mt-8">{t("about.ceo_sign")}</p>
            </motion.div>
          </div>
       </section>
@@ -418,7 +390,7 @@ export default function AboutPage() {
              {/* Overlay Title - Straddling the bottom edge */}
              <div className="absolute -bottom-6 left-0 w-full text-center z-20">
                <h2 className="text-4xl md:text-6xl font-bold uppercase text-[#F7C66A] tracking-wide drop-shadow-xl inline-block px-4">
-                 NOTRE EQUIPE
+                 {t("about.team_title")}
                </h2>
              </div>
            </motion.div>
@@ -432,11 +404,11 @@ export default function AboutPage() {
              transition={{ duration: 1.0, delay: 0.2, ease: "easeOut" }}
            >
              <span className="font-['PhotographSignature'] text-4xl md:text-5xl text-white block mb-6">
-               Des Professionnels à Votre Service
+               {t("about.team_script")}
              </span>
-             <p className="text-sm md:text-base text-gray-200 leading-relaxed drop-shadow-md font-light">
-               Chacun des projets initiés par <strong className="text-white font-bold">Aymen Promotion Immobilière</strong> est une œuvre d'art en soi, résultat de l'engagement passionné de ses équipes d'experts, tous des spécialistes chevronnés dans leurs domaines respectifs. Vous pouvez avoir une confiance totale en nos professionnels de l'immobilier, animés par un désir constant de repousser les limites de l'innovation. Ils sauront vous accompagner et vous conseiller tout au long de votre parcours vers l'acquisition d'un appartement.
-             </p>
+             <p className="text-sm md:text-base text-gray-200 leading-relaxed drop-shadow-md font-light"
+               dangerouslySetInnerHTML={{ __html: t("about.team_desc") }}
+             />
            </motion.div>
         </div>
       </section>
@@ -445,10 +417,10 @@ export default function AboutPage() {
       <section className="relative py-12 px-4 md:px-10 z-10 text-center animate-fadeInUp" style={{ animationDelay: "1400ms" }}>
          <div className="mb-16">
            <span className="font-['PhotographSignature'] text-5xl md:text-6xl text-[#F7C66A] block mb-2">
-             Nos Valeurs
+             {t("about.values_script")}
            </span>
            <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wide text-white">
-             AU QUOTIDIEN POUR VOUS
+             {t("about.values_title")}
            </h2>
          </div>
 
@@ -574,7 +546,7 @@ export default function AboutPage() {
            transition={{ duration: 1.0, ease: "easeOut" }}
          >
            <h2 className="text-3xl md:text-4xl font-bold uppercase text-[#F7C66A] tracking-wide">
-             NOS TÉMOIGNAGES
+             {t("about.testimonials_title")}
            </h2>
          </motion.div>
 
@@ -675,10 +647,10 @@ export default function AboutPage() {
            viewport={{ once: true, amount: 0.3 }}
            transition={{ duration: 1.0, ease: "easeOut" }}
          >
-           <h2 className="text-3xl md:text-5xl font-bold text-[#F7C66A] mb-4">FAQ</h2>
+           <h2 className="text-3xl md:text-5xl font-bold text-[#F7C66A] mb-4">{t("about.faq_title")}</h2>
            <p className="text-2xl md:text-4xl font-light text-white">
-             Nous avons les réponses à<br/>
-             <span className="font-bold">vos questions</span>
+             {t("about.faq_subtitle_p1")}<br/>
+             <span className="font-bold">{t("about.faq_subtitle_p2")}</span>
            </p>
          </motion.div>
 

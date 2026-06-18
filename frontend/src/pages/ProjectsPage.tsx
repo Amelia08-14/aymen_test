@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link, useLocation } from "react-router-dom";
@@ -121,6 +122,7 @@ function getProgress(project: Project) {
 
 // "Cube" Card for Projects
 function ProjectCard({ project, style }: { project: Project; style?: React.CSSProperties }) {
+  const { t } = useTranslation();
   return (
     <Link 
       to={`/projet/${project.title.toLowerCase()}`}
@@ -131,7 +133,7 @@ function ProjectCard({ project, style }: { project: Project; style?: React.CSSPr
       <div className="flex flex-1 flex-col justify-between p-6 z-10 w-[55%]">
         <div>
           <h3 className="mb-2 text-white leading-tight">
-            <span className="block text-[10px] font-medium uppercase tracking-widest opacity-70 mb-1">Résidence</span>
+            <span className="block text-[10px] font-medium uppercase tracking-widest opacity-70 mb-1">{t("projects.residence")}</span>
             <span className="text-xl md:text-2xl font-bold uppercase tracking-wide text-[#F7C66A]">{project.title}</span>
           </h3>
           <div className="mb-4 flex items-center gap-2 text-xs text-white/60 font-medium">
@@ -139,14 +141,14 @@ function ProjectCard({ project, style }: { project: Project; style?: React.CSSPr
             <span>{project.location}</span>
           </div>
           <p className="mb-4 text-xs leading-relaxed text-white/60 line-clamp-3 font-light">
-            {project.description}
+            {t(`project_desc.${project.id}`, { defaultValue: project.description })}
           </p>
 
           {/* Progress Bar */}
           {project.status !== "FINIS" && (
             <div className="mb-6">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-[10px] font-medium uppercase tracking-wider text-white/60">Avancement</span>
+                <span className="text-[10px] font-medium uppercase tracking-wider text-white/60">{t("projects.progress")}</span>
                 <span className="text-[10px] font-bold text-[#F7C66A]">{getProgress(project)}%</span>
               </div>
               <div className="h-1 w-full rounded-full bg-white/10">
@@ -159,7 +161,7 @@ function ProjectCard({ project, style }: { project: Project; style?: React.CSSPr
           )}
         </div>
         <span className="w-fit text-[10px] font-bold uppercase tracking-[0.2em] text-[#F7C66A] transition hover:text-white border-b border-transparent hover:border-white pb-0.5">
-          DÉCOUVRIR
+          {t("projects.discover")}
         </span>
       </div>
 
@@ -201,8 +203,9 @@ function StaticImageCard({ src, alt, style }: { src: string; alt: string; style?
 }
 
 function NightProjectCard({ project, style }: { project: Project; style?: React.CSSProperties }) {
+  const { t } = useTranslation();
   return (
-    <Link 
+    <Link
       to={`/projet/${project.title.toLowerCase()}`}
       className="group relative h-64 overflow-hidden rounded-lg shadow-lg transition hover:shadow-2xl animate-fadeInUp"
       style={style}
@@ -213,7 +216,7 @@ function NightProjectCard({ project, style }: { project: Project; style?: React.
         alt={project.title}
         className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
       />
-      
+
       {/* Gradient Overlay - Stronger on the left for text readability */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#052620]/95 via-[#052620]/60 to-transparent" />
 
@@ -222,7 +225,7 @@ function NightProjectCard({ project, style }: { project: Project; style?: React.
         {/* Header: Title & Location */}
         <div>
           <h3 className="mb-2 text-white leading-tight drop-shadow-md">
-            <span className="block text-[10px] font-medium uppercase tracking-widest opacity-70 mb-1">Résidence</span>
+            <span className="block text-[10px] font-medium uppercase tracking-widest opacity-70 mb-1">{t("projects.residence")}</span>
             <span className="text-xl md:text-xl font-bold uppercase tracking-wide text-[#F7C66A]">{project.title}</span>
           </h3>
           <div className="flex items-center gap-2 text-xs text-[#F7C66A] font-medium drop-shadow-md">
@@ -234,18 +237,18 @@ function NightProjectCard({ project, style }: { project: Project; style?: React.
         {/* Body: Description Centered */}
         <div className="flex flex-1 flex-col justify-center">
           <p className="text-xs leading-relaxed text-white/90 line-clamp-3 drop-shadow-md font-medium w-[90%]">
-            {project.description}
+            {t(`project_desc.${project.id}`, { defaultValue: project.description })}
           </p>
 
           {/* Progress Bar */}
           {project.status !== "FINIS" && (
             <div className="mt-4 w-[90%]">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-[10px] font-medium uppercase tracking-wider text-white/80 drop-shadow-md">Avancement</span>
+                <span className="text-[10px] font-medium uppercase tracking-wider text-white/80 drop-shadow-md">{t("projects.progress")}</span>
                 <span className="text-[10px] font-bold text-[#F7C66A] drop-shadow-md">{getProgress(project)}%</span>
               </div>
               <div className="h-1 w-full rounded-full bg-white/20 backdrop-blur-sm">
-                <div 
+                <div
                   className="h-full rounded-full bg-[#F7C66A] transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(247,198,106,0.5)]"
                   style={{ width: `${getProgress(project)}%` }}
                 />
@@ -253,11 +256,11 @@ function NightProjectCard({ project, style }: { project: Project; style?: React.
             </div>
           )}
         </div>
-        
+
         {/* Footer: CTA */}
         <div>
           <span className="w-fit text-[10px] font-bold uppercase tracking-[0.2em] text-[#F7C66A] transition hover:text-white border-b border-transparent hover:border-white pb-0.5 drop-shadow-md">
-            DÉCOUVRIR
+            {t("projects.discover")}
           </span>
         </div>
       </div>
@@ -266,6 +269,7 @@ function NightProjectCard({ project, style }: { project: Project; style?: React.
 }
 
 function LocalityCard({ locality, style }: { locality: Locality; style?: React.CSSProperties }) {
+  const { t } = useTranslation();
   return (
     <Link 
       to={`/localite/${locality.name.split(',')[0].trim().toLowerCase().replace(/ /g, '-')}`}
@@ -293,7 +297,7 @@ function LocalityCard({ locality, style }: { locality: Locality; style?: React.C
           {locality.name}
         </h3>
         <p className="text-xs leading-relaxed text-white line-clamp-4 font-medium opacity-90">
-          {locality.description}
+          {t(`locality_desc.${locality.id}`, { defaultValue: locality.description })}
         </p>
       </div>
     </Link>
@@ -320,17 +324,20 @@ function Pagination() {
   );
 }
 
+const TABS = [
+  { value: "FINIS" as const, labelKey: "projects.tab_finished" },
+  { value: "EN COURS" as const, labelKey: "projects.tab_ongoing" },
+  { value: "LOCALITÉS" as const, labelKey: "projects.tab_localities" },
+];
+
 export default function ProjectsPage() {
+  const { t } = useTranslation();
   const location = useLocation();
   useEffect(() => {
-  window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: "auto", // important : pas smooth
-  });
-}, []);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, []);
   const [activeTab, setActiveTab] = useState<"FINIS" | "EN COURS" | "LOCALITÉS">("EN COURS");
-  const [visibleCount, setVisibleCount] = useState(9); // Initial count
+  const [visibleCount, setVisibleCount] = useState(9);
   const [selectedLocality, setSelectedLocality] = useState("TOUTES");
   const [selectedTypology, setSelectedTypology] = useState("TOUS");
 
@@ -421,24 +428,24 @@ export default function ProjectsPage() {
         
         {/* Title */}
         <h1 className="mb-8 text-center text-4xl font-bold text-[#F7C66A] md:text-5xl animate-fadeInUp uppercase tracking-wider">
-          {activeTab === "LOCALITÉS" ? "NOS LOCALITÉS" : "NOS PROJETS"}
+          {activeTab === "LOCALITÉS" ? t("projects.localities_title") : t("projects.title")}
         </h1>
 
         {/* Tabs */}
         <div className="mb-12 flex justify-center animate-fadeInUp" style={{ animationDelay: "0.1s" }}>
           <div className="flex gap-6 md:gap-12 text-lg md:text-2xl font-bold uppercase tracking-widest">
-            {(["FINIS", "EN COURS", "LOCALITÉS"] as const).map((tab) => (
+            {TABS.map(({ value, labelKey }) => (
               <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
+                key={value}
+                onClick={() => setActiveTab(value)}
                 className={`pb-2 transition-all relative
-                  ${activeTab === tab 
-                    ? "text-[#F7C66A]" 
+                  ${activeTab === value
+                    ? "text-[#F7C66A]"
                     : "text-white/60 hover:text-white"
                   }`}
               >
-                {tab}
-                {activeTab === tab && (
+                {t(labelKey)}
+                {activeTab === value && (
                   <span className="absolute bottom-0 left-0 h-[3px] w-full bg-[#F7C66A] shadow-[0_0_15px_#F7C66A]" />
                 )}
               </button>
@@ -452,24 +459,21 @@ export default function ProjectsPage() {
           <div className="flex flex-wrap justify-center gap-4">
             {activeTab !== "LOCALITÉS" && (
               <>
-                <FilterDropdown 
-                  label="TYPOLOGIE" 
-                  options={typologies} 
-                  value={selectedTypology} 
-                  onChange={setSelectedTypology} 
+                <FilterDropdown
+                  label={t("projects.filter_typology")}
+                  options={typologies}
+                  value={selectedTypology}
+                  onChange={setSelectedTypology}
                 />
-                <FilterDropdown 
-                  label="LOCALITÉ" 
-                  options={localities} 
-                  value={selectedLocality} 
-                  onChange={setSelectedLocality} 
+                <FilterDropdown
+                  label={t("projects.filter_locality")}
+                  options={localities}
+                  value={selectedLocality}
+                  onChange={setSelectedLocality}
                 />
               </>
             )}
           </div>
-
-          
-         
         </div>
 
         {/* Grid */}
@@ -514,7 +518,7 @@ export default function ProjectsPage() {
               onClick={handleLoadMore}
               className="group relative px-8 py-3 text-xs font-bold uppercase tracking-widest text-white border border-[#F7C66A] transition-all hover:bg-[#F7C66A] hover:text-[#031B17]"
             >
-              VOIR PLUS
+              {t("projects.load_more")}
             </button>
           </div>
         )}
